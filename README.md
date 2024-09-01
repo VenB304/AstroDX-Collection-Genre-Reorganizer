@@ -34,7 +34,8 @@ To install the AstroDX Collection Genre Reorganizer, follow these steps:
 
 To use the AstroDX Collection Genre Reorganizer, follow these steps:
 
-1. Enter Directory Path of the charts. 
+1. Enter Directory Path of the charts.
+requires Internet connection 
 
 ## Contributing
 
