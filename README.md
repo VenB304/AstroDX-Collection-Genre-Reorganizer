@@ -1,11 +1,11 @@
 To do list maybe:
 1. Complete and maintain mapping json
 2. Collection manager with thise json thingies for the game
-2.1 a way to revert them if ever needed
+a way to revert them if ever needed
 3. unknown handler
-3.1 what you wanna do, trash, keep to unknown folder or choose where
+what you wanna do, trash, keep to unknown folder or choose where
 4. collection manager
-4.1 move copy remove add charts to a collection 
+move copy remove add charts to a collection 
 5. maybe learn how this shit works and maybe, just maybe I get better and stop relying on chatgpt
 
 # AstroDX Collection Genre Reorganizer
