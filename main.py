@@ -12,20 +12,24 @@ maimai = []
 ongekiAndChunithm = []
 Utage = []
 
-def load_mapping_file(mapping_file):
+def load_mapping_file(mapping_url):
     mappings = {}
-    if os.path.exists(mapping_file):
-        with open(mapping_file, 'r') as file:
-            for line in file:
-                folder, genre = line.strip().split('=')
-                mappings[folder] = genre
+    try:
+        response = urllib.request.urlopen(mapping_url)
+        if response.status == 200:
+            # Load the JSON content directly
+            mappings = json.loads(response.read().decode('utf-8'))
+        else:
+            print(f"Failed to fetch mapping file, status code: {response.status}")
+    except Exception as e:
+        print(f"Error fetching or parsing mapping file: {e}")
     return mappings
 
 def update_mapping_file(mapping_file, folder, genre):
-    with open(mapping_file, 'a') as file:
-        file.write(f"{folder}={genre}\n")
+    # This function can be used to handle updates if needed
+    pass
 
-def create_genre_folders(base_directory, names_lists, mapping_file):
+def create_genre_folders(base_directory, names_lists, mapping_url):
     parent_directory = os.path.dirname(base_directory)
     base_directory_name = os.path.basename(base_directory)
     new_directory = os.path.join(parent_directory, f"{base_directory_name} Grouped as Genre")
@@ -35,8 +39,9 @@ def create_genre_folders(base_directory, names_lists, mapping_file):
     unknown_folder = os.path.join(new_directory, "Unknown")
     os.makedirs(unknown_folder, exist_ok=True)
 
-    # Load folder mappings from the mapping file
-    folder_mappings = load_mapping_file(mapping_file)
+    # Load folder mappings from the online JSON file
+    folder_mappings = load_mapping_file(mapping_url)
+
     # Walk through all subdirectories and files
     for root, dirs, files in os.walk(base_directory):
         for folder in dirs:
@@ -77,12 +82,12 @@ def create_genre_folders(base_directory, names_lists, mapping_file):
                     try:
                         shutil.copytree(folder_path, destination, dirs_exist_ok=True)
                         # Prompt user to manually map the folder later
-                        print(f"Folder '{folder}' was not matched. Please update {mapping_file} with the correct genre.")
+                        print(f"Folder '{folder}' was not matched. Please update the mapping file with the correct genre.")
                     except Exception as e:
                         print(f"Error copying folder {folder_path} to {destination}: {e}")
 
 directory = input("Enter the base directory path: ").strip()
-mapping_file = "C:\Users\Ven\OneDrive\Documents\GitHub\grouping version into genre\AstroDX-Collection-Genre-Reorganizer\folder_mapping.json"
+mapping_url = "https://raw.githubusercontent.com/VenB304/AstroDX-Collection-Genre-Reorganizer/711fb494c77bed825e030339f0d46382a040b379/folder_mapping.json"
 
 # Example URL and JSON parsing
 maimaiSongListURL = "https://maimai.sega.jp/data/maimai_songs.json"
@@ -130,4 +135,4 @@ testObject = {
     "宴会場": Utage
 }
 
-create_genre_folders(directory, testObject, mapping_file)
+create_genre_folders(directory, testObject, mapping_url)
