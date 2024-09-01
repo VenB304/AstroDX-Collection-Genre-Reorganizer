@@ -87,7 +87,7 @@ def create_genre_folders(base_directory, names_lists, mapping_url):
                         print(f"Error copying folder {folder_path} to {destination}: {e}")
 
 directory = input("Enter the base directory path: ").strip()
-mapping_url = "https://raw.githubusercontent.com/VenB304/AstroDX-Collection-Genre-Reorganizer/711fb494c77bed825e030339f0d46382a040b379/folder_mapping.json"
+mapping_url = "https://raw.githubusercontent.com/VenB304/AstroDX-Collection-Genre-Reorganizer/main/folder_mapping.json"
 
 # Example URL and JSON parsing
 maimaiSongListURL = "https://maimai.sega.jp/data/maimai_songs.json"
