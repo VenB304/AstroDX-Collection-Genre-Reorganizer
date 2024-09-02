@@ -50,18 +50,21 @@ def create_genre_folders(base_directory, names_lists, mapping_url):
             
             if has_bg_or_track:
                 matched = False
+                genre = None
+
                 if folder in folder_mappings:
-                    # Use the genre from the mapping file
                     genre = folder_mappings[folder]
-                    genre_folder = os.path.join(new_directory, genre)
-                    os.makedirs(genre_folder, exist_ok=True)
-                    destination = os.path.join(genre_folder, folder)
-                    try:
-                        shutil.copytree(folder_path, destination, dirs_exist_ok=True)
-                        matched = True
-                    except Exception as e:
-                        print(f"Error copying folder {folder_path} to {destination}: {e}")
+                    if genre:  # Genre is not an empty string
+                        genre_folder = os.path.join(new_directory, genre)
+                        os.makedirs(genre_folder, exist_ok=True)
+                        destination = os.path.join(genre_folder, folder)
+                        try:
+                            shutil.copytree(folder_path, destination, dirs_exist_ok=True)
+                            matched = True
+                        except Exception as e:
+                            print(f"Error copying folder {folder_path} to {destination}: {e}")
                 else:
+                    # Check against the genre lists populated from the maimai_songs.json
                     for list_name, name_list in names_lists.items():
                         if folder in name_list:
                             genre_folder = os.path.join(new_directory, list_name)
@@ -83,6 +86,7 @@ def create_genre_folders(base_directory, names_lists, mapping_url):
                         shutil.copytree(folder_path, destination, dirs_exist_ok=True)
                         # Prompt user to manually map the folder later
                         print(f"Folder '{folder}' was not matched. Please update the mapping file with the correct genre.")
+                        
                     except Exception as e:
                         print(f"Error copying folder {folder_path} to {destination}: {e}")
 
@@ -125,6 +129,7 @@ for item in maimaiSongList:
         ongekiAndChunithm.append(item.get('title'))
         ongekiAndChunithm.append(item.get('title_kana'))
 
+# Organize genre lists into a dictionary
 testObject = {
     "POPS＆アニメ": popAndAnime,
     "niconico＆ボーカロイド": niconicoAndVocaloid,
