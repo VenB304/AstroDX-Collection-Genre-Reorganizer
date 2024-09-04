@@ -21,7 +21,9 @@ Sorts charts under a path into genre categories into one of the following:
 6. Utage
 7. Unknown (in cases where it cannot find a genre to where it matches)
 
-Current status of the program only find the folders/charts are in and verifies their genre, file operations will be added later for now
+Current status of the program only find the folders/charts are in and verifies their genre, file operations will be added later for now.
+
+is able to categorize all the available charts in AstroDX as of September 5, 2024
 
 ## Description
 
