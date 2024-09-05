@@ -4,7 +4,7 @@ To do list maybe:
 2. Collection manager with thise json thingies for the game
 - a way to revert them if ever needed
 3. unknown handler
-- what you wanna do, trash, keep to unknown folder or choose where
+- what you wanna do, trash, keep to unknown folder or choose where(only able to copy to unknown folder for now)
 4. collection manager
 - move copy remove add charts to a collection 
 5. maybe learn how this shit works and maybe, just maybe I get better and stop relying on chatgpt
@@ -19,11 +19,12 @@ Sorts charts under a path into genre categories into one of the following:
 4. maimai
 5. ongeki and chunithm
 6. Utage
-7. Unknown (in cases where it cannot find a genre to where it matches)
+7. Chinese pop
+8. Unknown (in cases where it cannot find a genre to where it matches)
 
 Current status of the program only find the folders/charts are in and verifies their genre, file operations will be added later for now.
 
-is able to categorize all the available charts in AstroDX as of September 5, 2024
+is able to categorize all the available charts for AstroDX as of September 5, 2024
 
 ## Description
 
