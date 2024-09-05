@@ -19,7 +19,8 @@ Sorts charts under a path into genre categories into one of the following:
 4. maimai
 5. ongeki and chunithm
 6. Utage
-7. Unknown (in cases where it cannot find a genre to where it matches)
+7. Chinese pop
+8. Unknown (in cases where it cannot find a genre to where it matches)
 
 Current status of the program only find the folders/charts are in and verifies their genre, file operations will be added later for now.
 
