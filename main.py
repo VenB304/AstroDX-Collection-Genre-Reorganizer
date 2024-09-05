@@ -3,6 +3,104 @@ import json
 import urllib.request
 import shutil
 
+def unknownHandler(title_value, folder_path, catcode):
+    chosen = False
+    print(f"unable to determine genre for {title_value} in {folder_path}")
+    while not chosen:
+        print("Choices:")
+        print("[1] Copy to unidentified folder")
+        print("[2] Choose Manually")
+        print("[3] Log to unidentifiedCharts.txt and Ignore")
+        choice = str(input("Enter the number of your choice: "))
+        match choice:
+            case "1":
+                chosen = True
+                os.makedirs(root_path + "/levels/Unidentified/" + os.path.basename(folder_path), exist_ok=True)
+                try:
+                    shutil.copytree(folder_path, root_path + "/levels/Unidentified/" + os.path.basename(folder_path), dirs_exist_ok=True)
+                except:
+                    print(f"Error: Copy failed: {folder_path}")
+                    debugging.write(f"Error: Copy failed: {folder_path} to Output folder\n")
+                print(f"copied to output: {folder_path}")
+                
+            case "2":
+                chosen = True
+                print("Choices:")
+                print("[1] POPS＆アニメ")
+                print("[2] niconico＆ボーカロイド")
+                print("[3] 東方Project")
+                print("[4] ゲーム＆バラエティ")
+                print("[5] maimai")
+                print("[6] オンゲキ＆CHUNITHM")
+                print("[7] 宴会場")
+                print("[8] 中国流行乐")
+                print("[9] Unidentified")
+                manualChosen = False
+                while not manualChosen:
+                    manualChoice = str(input("Enter the number of your choice: "))
+                    if manualChoice in ["1","2","3","4","5","6","7","8","9"]:
+                        os.makedirs(root_path + "/levels/" + catcode[int(manualChoice)-1] + "/" + os.path.basename(folder_path), exist_ok=True)
+                        try:
+                            shutil.copytree(folder_path, root_path + "/levels/" + catcode[int(manualChoice)-1] + "/" + os.path.basename(folder_path), dirs_exist_ok=True)
+                        except:
+                            print(f"Error: Copy failed: {folder_path}")
+                            debugging.write(f"Error: Copy failed: {folder_path} to Output folder\n")
+                        print(f"copied to output: {folder_path}")
+                        manualChosen = True
+                    else:
+                        print("Invalid choice, please try again")
+                        manualChosen = False
+                        continue
+            case "3":
+                chosen = True
+                print(f"IGNORED: {title_value} in {folder_path}")
+                unidentifiedChartsDebug.write(f"IGNORED: {title_value} in {folder_path}\n")
+                
+            case "_":
+                print("Invalid choice, please try again")
+                chosen = False
+                continue
+
+def parse_JSON_Database():
+    try:
+        response = urllib.request.urlopen(maimai_JP_songlist_URL)
+        if response.status == 200:
+            maimaiSongInfoJSON = json.loads(response.read())
+        else:
+            print(f"Failed to fetch data, status code: {response.status}")
+            maimaiSongInfoJSON = []
+    except Exception as e:
+        print(f"Error fetching or parsing JSON: {e}")
+        maimaiSongInfoJSON = []
+
+    try:
+        response = urllib.request.urlopen(manualCheckURL)
+        if response.status == 200:
+            manualCheckJSON = json.loads(response.read())
+        else:
+            print(f"Failed to fetch data, status code: {response.status}")
+            manualCheckJSON = []
+    except Exception as e:
+        print(f"Error fetching or parsing JSON: {e}")
+        manualCheckJSON = []
+
+    for item in maimaiSongInfoJSON:
+        if item.get('catcode') == 'maimai':
+            maimai.append(item.get('title'))
+        elif item.get('catcode') == 'POPS＆アニメ':
+            popAndAnime.append(item.get('title'))
+        elif item.get('catcode') == 'ゲーム＆バラエティ':
+            gameAndVariety.append(item.get('title'))
+        elif item.get('catcode') == '東方Project':
+            touhouProject.append(item.get('title'))
+        elif item.get('catcode') == 'niconico＆ボーカロイド':
+            niconicoAndVocaloid.append(item.get('title'))
+        elif item.get('catcode') == 'オンゲキ＆CHUNITHM':
+            ongekiAndChunithm.append(item.get('title'))
+
+    return maimaiSongInfoJSON, manualCheckJSON
+
+
 def parse_maidata(filepath):
     lv_7_value = None
     title_value = None
@@ -18,7 +116,7 @@ def parse_maidata(filepath):
     
     return lv_7_value, title_value
 
-def process_folders(root_path):
+def check_only_folders(root_path,maimaiSongInfoJSON,manualCheckJSON):
     for root, dirs, files in os.walk(root_path):
         for folder in dirs:
             folder_path = os.path.join(root, folder)
@@ -26,61 +124,132 @@ def process_folders(root_path):
             
             if os.path.isfile(maidata_path):
                 lv_7_value, title_value = parse_maidata(maidata_path)
-                print(f"Folder: {folder}")
-                print(f"&lv_7: {lv_7_value}")
-                print(f"&title: {title_value}")
-                
+                print(f"&title:\t\t{title_value}")
+
                 if lv_7_value:
-                    print("utage found")
-                    savedFolderPaths[6].append(folder_path)
-                    #move or copy to utage folder
+                    print(f"matched to in maimaiJSON: \tutage")
 
                 elif title_value in popAndAnime or folder in popAndAnime:
-                    #move or copy to pop and anime folder
-                    print("title value matched in pop and anime list")
+                    print(f"matched to maimaiJSON: \tpop and anime")
+
+                elif title_value in niconicoAndVocaloid or folder in niconicoAndVocaloid:
+                    print(f"matched to maimaiJSON: \tniconico and vocaloid")
+
+                elif title_value in touhouProject or folder in touhouProject:
+                    print(f"matched to maimaiJSON: \ttouhou project")
+
+                elif title_value in gameAndVariety or folder in gameAndVariety:
+                    print(f"matched to maimaiJSON: \tgame and variety")
+
+                elif title_value in maimai or folder in maimai:
+                    print(f"matched to maimaiJSON: \tmaimai")
+                
+                elif title_value in ongekiAndChunithm or folder in ongekiAndChunithm:
+                    print(f"matched to maimaiJSON: \tongeki and chunithm")
+                
+                else:
+                    if title_value in manualCheckJSON:
+                        if manualCheckJSON[title_value] == "POPS＆アニメ":
+                            print(f"matched to manualCheckJSON: \tpop and anime")
+
+                        elif manualCheckJSON[title_value] == "niconico＆ボーカロイド":
+                            print(f"matched to manualCheckJSON: \tniconico and vocaloid")
+
+                        elif manualCheckJSON[title_value] == "東方Project":
+                            print(f"matched to manualCheckJSON: \ttouhou project")
+
+                        elif manualCheckJSON[title_value] == "ゲーム＆バラエティ":
+                            print(f"matched to manualCheckJSON: \tgame and variety")
+
+                        elif manualCheckJSON[title_value] == "maimai":
+                            print(f"matched to manualCheckJSON: \tmaimai")
+
+                        elif manualCheckJSON[title_value] == "オンゲキ＆CHUNITHM":
+                            print(f"matched to manualCheckJSON: \tongeki and chunithm")
+
+                        elif manualCheckJSON[title_value] == "中国流行乐":
+                            print(f"matched to manualCheckJSON: \tchinese pop")
+
+                        elif manualCheckJSON[title_value] == "宴会場":
+                            print(f"matched to manualCheckJSON: \tutage")
+
+                        else:
+                            print(f"{title_value} found in manual check, value empty, @venb304 please update manualCheck.json")
+                            # move or copy to unidentified folder
+                    else:
+                        if title_value:
+                            print(title_value + " not match, Unidentified genre")
+                        else:
+                            print(f"No title found, Unidentified genre in {folder_path}")
+                
+            else:
+                print(f"{folder_path} is empty, moving on")
+
+def proces_toGenre(root_path, maimaiSongInfoJSON, manualCheckJSON):
+    savedFolderPaths = [[],[],[],[],[],[],[],[],[]]
+    catcode = ["POPS＆アニメ", "niconico＆ボーカロイド", "東方Project", "ゲーム＆バラエティ", "maimai", "オンゲキ＆CHUNITHM", "宴会場", "中国流行乐","Unidentified"]
+
+    if os.path.isdir(root_path + "/levels/"):
+        if not os.listdir(root_path + "/levels/"):
+            print(f"{root_path}/levels/ is empty")
+        else:
+            print(f"{root_path}/levels/ is not empty")
+            print(f"deleting {root_path}/levels/")
+            shutil.rmtree(root_path + "/levels/")
+
+    for root, dirs, files in os.walk(root_path):
+        for folder in dirs:
+            folder_path = os.path.join(root, folder)
+            maidata_path = os.path.join(folder_path, 'maidata.txt')
+            
+            if os.path.isfile(maidata_path):
+                lv_7_value, title_value = parse_maidata(maidata_path)
+                print(f"Folder: {folder_path}")
+                
+                if lv_7_value:
+                    print(f"{title_value} has utage difficulty | matched to in maimaiJSON: utage")
+                    savedFolderPaths[6].append(folder_path)
+
+                elif title_value in popAndAnime or folder in popAndAnime:
+                    print(f"{title_value} matched to maimaiJSON: pop and anime")
                     savedFolderPaths[0].append(folder_path)
 
                 elif title_value in niconicoAndVocaloid or folder in niconicoAndVocaloid:
-                    #move or copy to niconico and vocaloid folder
-                    print("title value matched in niconico and vocaloid list")
+                    print(f"{title_value} matched to maimaiJSON: niconico and vocaloid")
                     savedFolderPaths[1].append(folder_path)
 
                 elif title_value in touhouProject or folder in touhouProject:
-                    #move or copy to touhou project folder
-                    print("title value matched in touhou project list")
+                    print(f"{title_value} matched to maimaiJSON: touhou project")
                     savedFolderPaths[2].append(folder_path)
 
                 elif title_value in gameAndVariety or folder in gameAndVariety:
-                    #move or copy to game and variety folder
-                    print("title value matched in game and variety list")
+                    print(f"{title_value} matched to maimaiJSON: game and variety")
                     savedFolderPaths[3].append(folder_path)
 
                 elif title_value in maimai or folder in maimai:
-                    #move or copy to maimai folder
-                    print("title value matched in maimai list")
+                    print(f"{title_value} matched to maimaiJSON: maimai")
                     savedFolderPaths[4].append(folder_path)
                 
                 elif title_value in ongekiAndChunithm or folder in ongekiAndChunithm:
-                    #move or copy to ongeki and chunithm folder
-                    print("title value mathed in ongeki and chunithm list")
+                    print(f"{title_value} matched to maimaiJSON: ongeki and chunithm")
                     savedFolderPaths[5].append(folder_path)
                 
                 else:
                     if title_value in manualCheckJSON:
                         if manualCheckJSON[title_value] == "POPS＆アニメ":
-                            print("title matched in manual check: pop and anime list")
+                            print(f"{title_value} matched to manualCheckJSON: pop and anime")
                             savedFolderPaths[0].append(folder_path)
 
                         elif manualCheckJSON[title_value] == "niconico＆ボーカロイド":
-                            print("title matched in manual check: niconico and vocaloid list")
+                            print(f"{title_value} matched to manualCheckJSON: niconico and vocaloid")
                             savedFolderPaths[1].append(folder_path)
 
                         elif manualCheckJSON[title_value] == "東方Project":
-                            print("title matched in manual check: touhou project list")
+                            print(f"{title_value} matched to manualCheckJSON: touhou project")
                             savedFolderPaths[2].append(folder_path)
 
                         elif manualCheckJSON[title_value] == "ゲーム＆バラエティ":
-                            print("title matched in manual check: game and variety list")
+                            print(f"{title_value} matched to manualCheckJSON: game and variety")
                             savedFolderPaths[3].append(folder_path)
 
                         elif manualCheckJSON[title_value] == "maimai":
@@ -101,120 +270,95 @@ def process_folders(root_path):
 
                         else:
                             print(title_value + " found in manual check, value empty, @venb304 please update manualCheck.json")
-                            unidentifiedChartsDebug.write(title_value + " found in manual check, value empty, @venb304 please update manualCheck.json" + folder_path + "\n")
-                            # move or copy to unidentified folder
                     else:
                         if title_value:
                             print(title_value + " not match, Unidentified genre")
-                            unidentifiedChartsDebug.write(title_value + " not matched, Unidentified genre\n")
                         else:
-                            print("No title found, Unidentified genre")
-                            unidentifiedChartsDebug.write("No title found, Unidentified genre in " + folder_path + "\n")  
+                            print("No title found, Unidentified genre") 
                         
                         savedFolderPaths[8].append(folder_path)
-                
-                print("-" * 30)
             else:
-                print("Current folder empty, moving on...\n\n")
+                print(f"{folder_path} is empty, moving on")
+
+    for category in savedFolderPaths:
+        match savedFolderPaths.index(category):
+            case 0:
+                print("\ncurrent category: pop and anime\n")
+            case 1:
+                print("\ncurrent category: niconico and vocaloid\n")
+            case 2:
+                print("\ncurrent category: touhou project\n")
+            case 3:
+                print("\ncurrent category: game and variety\n")
+            case 4:
+                print("\ncurrent category: maimai\n")
+            case 5:
+                print("\ncurrent category: ongeki and chunithm\n")
+            case 6:
+                print("\ncurrent category: utage\n")
+            case 7:
+                print("\ncurrent category: chinese pop\n")
+            case 8:
+                print("\ncurrent category: unidentified\n")
+            case _:
+                print("\ncurrent category: how? there should not be another category, how did this return to 8\n")
+        
+        for savedPaths in category:
+            if savedFolderPaths.index(category) == 8:
+                unknownHandler(os.path.basename(savedPaths), savedPaths, catcode)
+                continue
+            else:
+                os.makedirs(root_path+"/levels/" + catcode[savedFolderPaths.index(category)] + "/" + os.path.basename(savedPaths), exist_ok=True)
+                try:
+                    shutil.copytree(savedPaths, root_path + "/levels/" + catcode[savedFolderPaths.index(category)] + "/" + os.path.basename(savedPaths), dirs_exist_ok=True)
+                except:
+                    print(f"Error: Copy failed: {savedPaths}")
+                    debugging.write(f"Error: Copy failed: {savedPaths} to Output folder\n")
+                print(f"copied to output: {savedPaths}")
 
 debugging = open("debugging.txt","w", encoding="utf-8-sig")
-
-manualCheckURL = "https://raw.githubusercontent.com/VenB304/AstroDX-Collection-Genre-Reorganizer/main/manualCheck.json"
-maimai_JP_songlist_URL = "https://maimai.sega.jp/data/maimai_songs.json"
-try:
-    response = urllib.request.urlopen(maimai_JP_songlist_URL)
-    if response.status == 200:
-        maimaiSongInfoJSON = json.loads(response.read())
-    else:
-        print(f"Failed to fetch data, status code: {response.status}")
-        maimaiSongInfoJSON = []
-except Exception as e:
-    print(f"Error fetching or parsing JSON: {e}")
-    maimaiSongInfoJSON = []
-
-try:
-    response = urllib.request.urlopen(manualCheckURL)
-    if response.status == 200:
-        manualCheckJSON = json.loads(response.read())
-    else:
-        print(f"Failed to fetch data, status code: {response.status}")
-        manualCheckJSON = []
-except Exception as e:
-    print(f"Error fetching or parsing JSON: {e}")
-    manualCheckJSON = []
-
+unidentifiedChartsDebug = open("unidentifiedCharts.txt","w", encoding="utf-8-sig")
 popAndAnime = []
 niconicoAndVocaloid = []
 touhouProject = []
 gameAndVariety = []
 maimai = []
 ongekiAndChunithm = []
-Utage = []
 
-for item in maimaiSongInfoJSON:
-    if item.get('catcode') == 'maimai':
-        maimai.append(item.get('title'))
-    elif item.get('catcode') == 'POPS＆アニメ':
-        popAndAnime.append(item.get('title'))
-    elif item.get('catcode') == 'ゲーム＆バラエティ':
-        gameAndVariety.append(item.get('title'))
-    elif item.get('catcode') == '東方Project':
-        touhouProject.append(item.get('title'))
-    elif item.get('catcode') == 'niconico＆ボーカロイド':
-        niconicoAndVocaloid.append(item.get('title'))
-    elif item.get('catcode') == 'オンゲキ＆CHUNITHM':
-        ongekiAndChunithm.append(item.get('title'))
+manualCheckURL = "https://raw.githubusercontent.com/VenB304/AstroDX-Collection-Genre-Reorganizer/main/manualCheck.json"
+maimai_JP_songlist_URL = "https://maimai.sega.jp/data/maimai_songs.json"
+maimaiSongInfoJSON = []
+manualCheckJSON = []
+maimaiSongInfoJSON, manualCheckJSON = parse_JSON_Database()
 
-savedFolderPaths = [[],[],[],[],[],[],[],[],[]]
-catcode = ["POPS＆アニメ", "niconico＆ボーカロイド", "東方Project", "ゲーム＆バラエティ", "maimai", "オンゲキ＆CHUNITHM", "宴会場", "中国流行乐","Unidentified"]
-# 0 = pop and anime
-# 1 = niconico and vocaloid
-# 2 = touhou project
-# 3 = game and variety
-# 4 = maimai
-# 5 = ongeki and chunithm
-# 6 = utage
-# 7 = chinese pop
-# 8 = unidentified
+running = True
 
-unidentifiedChartsDebug = open("unidentifiedCharts.txt","a", encoding="utf-8-sig")
+while running:
+    print("\nMenu\n")
+    print("[1] Check folders only for GENRE grouping")
+    print("[2] Check folders for GENRE grouping and copy to Output folder")
+    print("[3] Generate collection.json files")
+    print("[0] Exit")
 
-root_path = input("Enter the root directory path: ").strip()
-process_folders(root_path)
+    choice = str(input("Enter the number you wanna do: "))
 
-
-
-for category in savedFolderPaths:
-    match savedFolderPaths.index(category):
-        case 0:
-            print("current category: pop and anime\n\n")
-        case 1:
-            print("current category: niconico and vocaloid\n\n")
-        case 2:
-            print("current category: touhou project\n\n")
-        case 3:
-            print("current category: game and variety\n\n")
-        case 4:
-            print("current category: maimai\n\n")
-        case 5:
-            print("current category: ongeki and chunithm\n\n")
-        case 6:
-            print("current category: utage\n\n")
-        case 7:
-            print("current category: chinese pop\n\n")
-        case 8:
-            print("current category: unidentified\n\n")
+    match choice:
+        case "1":
+            print("Checking folders only for GENRE grouping")
+            print("this will not copy to levels folder")
+            print("Sample path: C:/Users/username/Downloads/maisquared/")
+            root_path = input("Enter the root directory path: ").strip()
+            check_only_folders(root_path,maimaiSongInfoJSON,manualCheckJSON)
+        case "2":
+            print("Checking folders for GENRE grouping and copy to Output folder")
+            print("this will copy to levels folder within the same root directory/path you input")
+            print("Sample path: C:/Users/username/Downloads/maisquared/")
+            root_path = input("Enter the root directory path: ").strip()
+            proces_toGenre(root_path,maimaiSongInfoJSON,manualCheckJSON)
+        case "3":
+            print("Not implemented yet")
+        case "0":
+            running = False
         case _:
-            print("current category: how? there should not be another category, how did this return to 8\n\n")
-    
-    for savedPaths in category:
-        print(f"current folder: {savedPaths}\n")
-        os.makedirs(root_path+"/levels/" + catcode[savedFolderPaths.index(category)] + "/" + os.path.basename(savedPaths), exist_ok=True)
-        try:
-            shutil.copytree(savedPaths, root_path + "/levels/" + catcode[savedFolderPaths.index(category)] + "/" + os.path.basename(savedPaths), dirs_exist_ok=True)
-        except:
-            print(f"Error copying {savedPaths} to Output folder")
-            debugging.write(f"Copy Error: {savedPaths} to Output folder\n")
-        print(f"{savedPaths} moved to Output folder")
-
-
+            print("Invalid choice, please try again")
+            continue
