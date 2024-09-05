@@ -1,13 +1,13 @@
 To do list maybe:
-1. ~~Complete and maintain mapping json~~
- - Maintain manualCheck.json for updates
-2. Collection manager with this json thingies for the game
-- a way to revert them into grouping by version or a custom made by the user if ever needed
-3. ~~unknown handler~~
-- what you wanna do, trash, keep to unknown folder or choose where(only able to copy to unknown folder for now)
-4. collection manager
-- move copy remove add charts to a collection 
-5. maybe learn how this shit works and maybe, just maybe I get better and stop relying on chatgpt
+- ~~Complete and maintain mapping json~~
+  - Maintain manualCheck.json for updates
+- Collection manager with this json thingies for the game
+  - a way to revert them into grouping by version or a custom made by the user if ever needed
+- ~~unknown handler~~
+  - what you wanna do, trash, keep to unknown folder or choose where(only able to copy to unknown folder for now)
+- collection manager
+  - move copy remove add charts to a collection 
+- maybe learn how this shit works and maybe, just maybe I get better and stop relying on chatgpt
 
 # AstroDX Collection Genre Reorganizer
 
@@ -28,7 +28,17 @@ is able to categorize all the available charts for AstroDX as of September 5, 20
 
 ## Description
 
-AstroDX Collection Genre Reorganizer is a tool designed to sort and organize charts into specified genre categories. This can help to maintain a well-structured collection of music charts, making it easier to navigate and find specific genres. Chatgpt rawr
+This project automates the sorting and categorization of maimai song charts into their respective genres based on a JSON mapping file. The script parses folders and files, identifies genre categories from chart data, and organizes them into specific directories. Unidentified charts are either logged or manually categorized by the user.
+
+## Features
+- Generate Manifest Files
+  - Automatically create manifest.json files for each directory, with optional GUID appending.
+- Customizable Chart Sorting
+  - Organizes song charts into genres based on provided data in a JSON file or manual input.
+- Unidentified Handler
+  - Allows users to decide how to process folders that don’t match known genres by either copying them to an unidentified folder, logging them, or assigning them manually.
+- Support for Manual and Automated Classification
+  - The script uses both automatic matching against JSON data and manual input for unidentified items.
 
 ## Prerequisuites
 
