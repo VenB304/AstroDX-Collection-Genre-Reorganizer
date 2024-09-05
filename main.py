@@ -241,7 +241,6 @@ def check_only_folders(root_path,maimaiSongInfoJSON,manualCheckJSON):
 
                         else:
                             print(f"{title_value} found in manual check, value empty, @venb304 please update manualCheck.json")
-                            # move or copy to unidentified folder
                     else:
                         if title_value:
                             print(title_value + " not match, Unidentified genre")
@@ -401,7 +400,7 @@ running = True
 
 while running:
     print("\nMenu\n")
-    print("[1] Check folders only for GENRE grouping")
+    print("[1] Check folders only for GENRE grouping (check if your copied path is correct)")
     print("[2] Check folders for GENRE grouping and copy to Output folder")
     print("[3] Generate collection.json files")
     print("[0] Exit")
@@ -419,16 +418,19 @@ while running:
             print("Checking folders for GENRE grouping and copy to Output folder")
             print("this will copy to levels folder within the same root directory/path you input")
             print("Sample path: C:/Users/username/Downloads/maisquared/")
+            print("inside the maisquared folder, there should be folders with maidata.txt files")
+            print("this will generate a new folder called 'levels'")
+            print("after the program is finished, inside the levels folder there should be genre folders like pop and anime, niconico and vocaloid, etc.")
             root_path = input("Enter the root directory path: ").strip()
             proces_toGenre(root_path,maimaiSongInfoJSON,manualCheckJSON)
         case "3":
             print("Generating collection.json files")
             print("this will generate collection.json files in the levels folder of a path")
-            print("Sample path: C:/Users/username/Downloads/maisquared/")
-            
+            print("Sample root path: C:/Users/username/Downloads/maisquared/levels")
+            print("inside the levels folder or any folder, there should be genre folders like pop and anime, niconico and vocaloid, etc.")
             
             root_path = input("Enter the root directory path: ").strip()
-            replace_files = input("Replace files in levels folder? (y/n): ").strip()
+            replace_files = input("Move files in levels folder to output? this will move them instead of copy only(y/n): ").strip()
             append_guid = input("Append GUID to folder names? (y/n): ").strip()
 
             generate_manifest(root_path, replace_files, append_guid)
