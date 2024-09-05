@@ -4,7 +4,7 @@ To do list maybe:
 2. Collection manager with thise json thingies for the game
 - a way to revert them if ever needed
 3. unknown handler
-- what you wanna do, trash, keep to unknown folder or choose where
+- what you wanna do, trash, keep to unknown folder or choose where(only able to copy to unknown folder for now)
 4. collection manager
 - move copy remove add charts to a collection 
 5. maybe learn how this shit works and maybe, just maybe I get better and stop relying on chatgpt
