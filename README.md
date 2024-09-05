@@ -40,6 +40,8 @@ This project automates the sorting and categorization of maimai song charts into
 - Support for Manual and Automated Classification
   - The script uses both automatic matching against JSON data and manual input for unidentified items.
 
+more chatgpt bs, raahhhhh
+
 ## Prerequisuites
 
 - install python at maybe atleast 3.x
@@ -48,7 +50,7 @@ This project automates the sorting and categorization of maimai song charts into
 
 To install the AstroDX Collection Genre Reorganizer, follow these steps:
 
-1. download main.py or use a latest release to be executable
+1. download main.py(this will most like be more updated than release executable) or use a latest release to be executable
 
 ## Usage
 
