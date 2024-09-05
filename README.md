@@ -24,7 +24,7 @@ Sorts charts under a path into genre categories into one of the following:
 
 Current status of the program only find the folders/charts are in and verifies their genre, file operations will be added later for now.
 
-is able to categorize all the available charts in AstroDX as of September 5, 2024
+is able to categorize all the available charts for AstroDX as of September 5, 2024
 
 ## Description
 
