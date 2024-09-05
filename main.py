@@ -250,10 +250,9 @@ def check_only_folders(root_path,maimaiSongInfoJSON,manualCheckJSON):
             else:
                 print(f"{folder_path} is empty, moving on")
 
-def proces_toGenre(root_path, maimaiSongInfoJSON, manualCheckJSON):
+def proces_toGenre(root_path, maimaiSongInfoJSON, manualCheckJSON, catcode):
     savedFolderPaths = [[],[],[],[],[],[],[],[],[]]
-    catcode = ["POPS＆アニメ", "niconico＆ボーカロイド", "東方Project", "ゲーム＆バラエティ", "maimai", "オンゲキ＆CHUNITHM", "宴会場", "中国流行乐","Unidentified"]
-
+    
     if os.path.isdir(root_path + "/levels/"):
         if not os.listdir(root_path + "/levels/"):
             print(f"{root_path}/levels/ is empty")
@@ -379,22 +378,28 @@ def proces_toGenre(root_path, maimaiSongInfoJSON, manualCheckJSON):
                 except:
                     print(f"Error: Copy failed: {savedPaths}")
                     debugging.write(f"Error: Copy failed: {savedPaths} to Output folder\n")
-                print(f"copied to output: {savedPaths}")
+                print(f"copied to {catcode[savedFolderPaths.index(category)]}: {savedPaths}")
 
-debugging = open("debugging.txt","w", encoding="utf-8-sig")
-unidentifiedChartsDebug = open("unidentifiedCharts.txt","w", encoding="utf-8-sig")
+# Start of the program
+os.makedirs("logging", exist_ok=True)
+debugging = open("logging/debugging.txt","w", encoding="utf-8-sig")
+unidentifiedChartsDebug = open("logging/unidentifiedCharts.txt","w", encoding="utf-8-sig")
+
 popAndAnime = []
 niconicoAndVocaloid = []
 touhouProject = []
 gameAndVariety = []
 maimai = []
 ongekiAndChunithm = []
+catcode = [["POPS＆アニメ", "niconico＆ボーカロイド", "東方Project", "ゲーム＆バラエティ", "maimai", "オンゲキ＆CHUNITHM", "宴会場", "中国流行乐","UNIDENTIFEIED"],["POPS ＆ ANIME", "niconico＆VOCALOID", "TOUHOU Project", "GAME ＆ VARIETY", "maimai", "ONGKEI ＆ CHUNITHM", "UTAGE", "CHINESE-POP","UNIDENTIFIED"]]
+maimaiSongInfoJSON = []
+manualCheckJSON = []
 
 manualCheckURL = "https://raw.githubusercontent.com/VenB304/AstroDX-Collection-Genre-Reorganizer/main/manualCheck.json"
 maimai_JP_songlist_URL = "https://maimai.sega.jp/data/maimai_songs.json"
-maimaiSongInfoJSON = []
-manualCheckJSON = []
+
 maimaiSongInfoJSON, manualCheckJSON = parse_JSON_Database()
+
 
 running = True
 
@@ -422,13 +427,26 @@ while running:
             print("this will generate a new folder called 'levels'")
             print("after the program is finished, inside the levels folder there should be genre folders like pop and anime, niconico and vocaloid, etc.")
             root_path = input("Enter the root directory path: ").strip()
-            proces_toGenre(root_path,maimaiSongInfoJSON,manualCheckJSON)
+            langChosen = False
+            while not langChosen:
+                print("\nJapanese or English Collection Name:")
+                print("[0] Japanese Collection Name")
+                print("[1] English Collection Name")
+                catLang = str(input("Enter choice: ")).strip()
+                if catLang in ["0","1"]:
+                    langChosen = True
+                else:
+                    print("Invalid choice, please try again")
+                    langChosen = False
+                    continue
+            proces_toGenre(root_path,maimaiSongInfoJSON,manualCheckJSON,catcode[int(catLang)])
         case "3":
             print("Generating collection.json files")
             print("this will generate collection.json files in the levels folder of a path")
             print("Sample root path: C:/Users/username/Downloads/maisquared/levels")
             print("inside the levels folder or any folder, there should be genre folders like pop and anime, niconico and vocaloid, etc.")
             
+
             root_path = input("Enter the root directory path: ").strip()
             replace_files = input("Move files in levels folder to output? this will move them instead of copy only(y/n): ").strip()
             append_guid = input("Append GUID to folder names? (y/n): ").strip()
@@ -444,7 +462,13 @@ while running:
                 append_guid = False
 
             generate_manifest(root_path, replace_files, append_guid)
+
+            print(f"collection.json files generated in {root_path}/output")
         case "0":
+            print("Exiting program")
+            debugging.close()
+            unidentifiedChartsDebug.close()
+
             running = False
         case _:
             print("Invalid choice, please try again")
