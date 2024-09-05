@@ -11,7 +11,7 @@ To do list maybe:
 
 # AstroDX Collection Genre Reorganizer
 
-Sorts charts under a path into genre categories into one of the following:
+Sorts charts under a path into of the following genre categories:
 
 1. pop and anime
 2. niconico and vocaloid
@@ -50,7 +50,7 @@ more chatgpt bs, raahhhhh
 
 To install the AstroDX Collection Genre Reorganizer, follow these steps:
 
-1. download main.py(this will most like be more updated than release executable) or use a latest release to be executable
+1. download main.py(this will most like be more updated than release executable) OR use a latest release executable
 
 ## Usage
 
@@ -74,9 +74,10 @@ To use the AstroDX Collection Genre Reorganizer, follow these steps:
 
 [3] Generate collection.json files
  - generates the necessary collection.json files to be used for AstroDX
- - this will generate collection.json files in the levels folder of a path
+ - this will generate collection.json files and saves them to "output" folder
  - Sample root path: C:/Users/username/Downloads/maisquared/levels/
  - inside the levels folder or any folder, there should be genre folders like pop and anime, niconico and vocaloid, etc.
+   - can also be used for normal grouping by version, or grouped according to user.
 
 ## Contributing
 
