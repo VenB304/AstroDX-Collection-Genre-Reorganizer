@@ -117,7 +117,7 @@ def process_folders(root_path):
             else:
                 print("Current folder empty, moving on...\n\n")
 
-
+debugging = open("debugging.txt","w", encoding="utf-8-sig")
 
 manualCheckURL = "https://raw.githubusercontent.com/VenB304/AstroDX-Collection-Genre-Reorganizer/main/manualCheck.json"
 maimai_JP_songlist_URL = "https://maimai.sega.jp/data/maimai_songs.json"
@@ -182,6 +182,8 @@ unidentifiedChartsDebug = open("unidentifiedCharts.txt","a", encoding="utf-8-sig
 root_path = input("Enter the root directory path: ").strip()
 process_folders(root_path)
 
+
+
 for category in savedFolderPaths:
     match savedFolderPaths.index(category):
         case 0:
@@ -206,11 +208,13 @@ for category in savedFolderPaths:
             print("current category: how? there should not be another category, how did this return to 8\n\n")
     
     for savedPaths in category:
-        print(f"current folder selected: {savedPaths}\n")
-        # print(f"{savedPaths} is in index: {savedFolderPaths[savedFolderPaths.index(category)].index(savedPaths)}\n")
+        print(f"current folder: {savedPaths}\n")
         os.makedirs(root_path+"/levels/" + catcode[savedFolderPaths.index(category)] + "/" + os.path.basename(savedPaths), exist_ok=True)
-        shutil.copytree(savedPaths, root_path + "/levels/" + catcode[savedFolderPaths.index(category)] + "/" + os.path.basename(savedPaths), dirs_exist_ok=True)
+        try:
+            shutil.copytree(savedPaths, root_path + "/levels/" + catcode[savedFolderPaths.index(category)] + "/" + os.path.basename(savedPaths), dirs_exist_ok=True)
+        except:
+            print(f"Error copying {savedPaths} to Output folder")
+            debugging.write(f"Copy Error: {savedPaths} to Output folder\n")
         print(f"{savedPaths} moved to Output folder")
-    # print(f"{item} is in index: {savedFolderPaths.index(item)}\n")
 
 
