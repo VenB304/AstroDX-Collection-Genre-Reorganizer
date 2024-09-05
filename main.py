@@ -2,6 +2,72 @@ import os
 import json
 import urllib.request
 import shutil
+import uuid
+import argparse
+
+def generate_manifest(root_path, replace_files, append_guid):
+    # original code by @castierook in the AstroDX Discord Server
+    def generate_guid():
+        return str(uuid.uuid4())
+
+    def create_manifest(directory, sub_dirs):
+        manifest = {
+            "name": os.path.basename(directory),
+            "id": None,
+            "serverUrl": None,
+            "levelIds": sub_dirs
+        }
+        return manifest
+
+    def process_directories(path, replace_files=False, append_guid=False):
+        root_dir = os.path.abspath(path)  # Use the specified path
+        output_dir = os.path.join(root_dir, 'output')
+        collections_dir = os.path.join(output_dir, 'collections')
+        levels_dir = os.path.join(output_dir, 'levels')
+
+        if os.path.exists(output_dir):
+            shutil.rmtree(output_dir)
+        os.makedirs(collections_dir)
+        os.makedirs(levels_dir)
+
+        for root, dirs, files in os.walk(root_dir):
+            if root == root_dir or output_dir in root:
+                continue
+
+            relative_root = os.path.relpath(root, root_dir)
+            if os.path.basename(relative_root) == "output":
+                continue
+
+            sub_dirs = []
+            for dir_name in dirs:
+                if append_guid:
+                    new_dir_name = f"{dir_name}-{generate_guid()}"
+                    sub_dirs.append(new_dir_name)
+                else:
+                    sub_dirs.append(dir_name)
+
+            manifest = create_manifest(root, sub_dirs)
+            manifest_path = os.path.join(collections_dir, relative_root, 'manifest.json')
+            os.makedirs(os.path.dirname(manifest_path), exist_ok=True)
+            
+            with open(manifest_path, 'w') as f:
+                json.dump(manifest, f, indent=2)
+
+            for original_dir_name, dir_name in zip(dirs, sub_dirs):
+                src_dir = os.path.join(root, original_dir_name)
+                dst_dir = os.path.join(levels_dir, dir_name)
+                if replace_files:
+                    shutil.move(src_dir, dst_dir)
+                else:
+                    shutil.copytree(src_dir, dst_dir)
+
+            if replace_files:
+                shutil.rmtree(root)
+
+            dirs.clear()  # prevent descending into subdirectories
+    process_directories(root_path, replace_files, append_guid)
+    # Example usage:
+    # process_directories('/path/to/directory', replace_files=True, append_guid=True)
 
 def unknownHandler(title_value, folder_path, catcode):
     chosen = False
@@ -356,7 +422,16 @@ while running:
             root_path = input("Enter the root directory path: ").strip()
             proces_toGenre(root_path,maimaiSongInfoJSON,manualCheckJSON)
         case "3":
-            print("Not implemented yet")
+            print("Generating collection.json files")
+            print("this will generate collection.json files in the levels folder of a path")
+            print("Sample path: C:/Users/username/Downloads/maisquared/")
+            
+            
+            root_path = input("Enter the root directory path: ").strip()
+            replace_files = input("Replace files in levels folder? (y/n): ").strip()
+            append_guid = input("Append GUID to folder names? (y/n): ").strip()
+
+            generate_manifest(root_path, replace_files, append_guid)
         case "0":
             running = False
         case _:
