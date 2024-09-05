@@ -433,6 +433,16 @@ while running:
             replace_files = input("Move files in levels folder to output? this will move them instead of copy only(y/n): ").strip()
             append_guid = input("Append GUID to folder names? (y/n): ").strip()
 
+            if replace_files == "y":
+                replace_files = True
+            else:
+                replace_files = False
+
+            if append_guid == "y":
+                append_guid = True
+            else:
+                append_guid = False
+
             generate_manifest(root_path, replace_files, append_guid)
         case "0":
             running = False
