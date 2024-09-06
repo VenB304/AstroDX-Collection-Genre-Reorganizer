@@ -56,7 +56,7 @@ To install the AstroDX Collection Genre Reorganizer, follow these steps:
 
 To use the AstroDX Collection Genre Reorganizer, follow these steps:
 
-1. execute main.py in your compiler or the executable
+1. execute main.py in your command line or the executable
 2. follow on console instructions
 
 [1] Check folders only for GENRE grouping
@@ -77,6 +77,12 @@ To use the AstroDX Collection Genre Reorganizer, follow these steps:
  - this will generate collection.json files in the levels folder of a path
  - Sample root path: C:/Users/username/Downloads/maisquared/levels/
  - inside the levels folder or any folder, there should be genre folders like pop and anime, niconico and vocaloid, etc.
+
+ (To maintainer of this project, update usage to allow users to better understand how to use the program)
+
+## Attribution
+
+This project has a file called "zetakaru_maimai_songlist.json", a copied json file from [arcade-songs](https://github.com/zetaraku/arcade-songs), created by [zetaraku](https://github.com/zetaraku). This component is used with permission, and credit is attributed to the original project as required.
 
 ## Contributing
 
