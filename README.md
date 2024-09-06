@@ -9,6 +9,15 @@ To do list maybe:
   - move copy remove add charts to a collection 
 - maybe learn how this shit works and maybe, just maybe I get better and stop relying on chatgpt
 
+User usage to do list
+1. Perform CHeck: check folders only for genre grouping and displays the genre it belongs to
+2. Perform organize into Genre: checks and takes a list matched and unidentified folders, copies the content of matched folders to genre folders, and user can choose what to do with unidentified folders
+   - also implement to copy or to move the files to the genre folders and makes it so that the will be unnested
+3. Restructure Collection: generate collection.json files and unnests the folders from path to be used for newer beta 2.0 of AstroDX
+4. Restructure Collection for pre beta: reads collection.json files and restructures the folders to be nested for pre beta versions of AstroDX(ehem, apple devices hehe[this could become outdated as fumi might update for apple deviced any time now])
+5. backup: use generate_manifest to create a backup of the current collection and to be used to revert back to the original collections
+6. restore: use the backup collection.json files to revert back to the original collections
+
 # AstroDX Collection Genre Reorganizer
 
 Sorts charts under a path into of the following genre categories:
