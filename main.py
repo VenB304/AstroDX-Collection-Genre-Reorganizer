@@ -12,7 +12,7 @@ def generate_manifest(root_path, replace_files, append_guid):
 
     def create_manifest(directory, sub_dirs):
         manifest = {
-            "name": os.path.basename(directory),
+            "name": os.path.basename(directory), 
             "id": None,
             "serverUrl": None,
             "levelIds": sub_dirs
@@ -77,6 +77,7 @@ def unknownHandler(title_value, folder_path, catcode):
         print("[1] Copy to unidentified folder")
         print("[2] Choose Manually")
         print("[3] Log to unidentifiedCharts.txt and Ignore")
+
         choice = str(input("Enter the number of your choice: "))
         match choice:
             case "1":
@@ -92,15 +93,15 @@ def unknownHandler(title_value, folder_path, catcode):
             case "2":
                 chosen = True
                 print("Choices:")
-                print("[1] POPS＆アニメ")
-                print("[2] niconico＆ボーカロイド")
-                print("[3] 東方Project")
-                print("[4] ゲーム＆バラエティ")
-                print("[5] maimai")
-                print("[6] オンゲキ＆CHUNITHM")
-                print("[7] 宴会場")
-                print("[8] 中国流行乐")
-                print("[9] Unidentified")
+                print(f"[1] {catcode[0]}")
+                print(f"[2] {catcode[1]}")
+                print(f"[3] {catcode[2]}")
+                print(f"[4] {catcode[3]}")
+                print(f"[5] {catcode[4]}")
+                print(f"[6] {catcode[5]}")
+                print(f"[7] {catcode[6]}")
+                print(f"[8] {catcode[7]}")
+                print(f"[9] {catcode[8]}")
                 manualChosen = False
                 while not manualChosen:
                     manualChoice = str(input("Enter the number of your choice: "))
@@ -134,10 +135,23 @@ def parse_JSON_Database():
             maimaiSongInfoJSON = json.loads(response.read())
         else:
             print(f"Failed to fetch data, status code: {response.status}")
-            maimaiSongInfoJSON = []
+            print("loading from local database")
+            maimaiSongInfoJSON = json.load(open("maimai_songs.json"))
     except Exception as e:
         print(f"Error fetching or parsing JSON: {e}")
         maimaiSongInfoJSON = []
+
+    try:
+        response = urllib.request.urlopen(zerataku_maimai_songlist_URL)
+        if response.status == 200:
+            zerataku_maimai_songlist_JSON = json.loads(response.read())
+        else:
+            print(f"Failed to fetch data, status code: {response.status}")
+            print("loading from local database")
+            zerataku_maimai_songlist_JSON = json.load(open("zerataku_maimai_songlist.json"))
+    except Exception as e:
+        print(f"Error fetching or parsing JSON: {e}")
+        zerataku_maimai_songlist_JSON = []
 
     try:
         response = urllib.request.urlopen(manualCheckURL)
@@ -145,7 +159,8 @@ def parse_JSON_Database():
             manualCheckJSON = json.loads(response.read())
         else:
             print(f"Failed to fetch data, status code: {response.status}")
-            manualCheckJSON = []
+            print("loading from local database")
+            manualCheckJSON = json.load(open("manualCheck.json"))
     except Exception as e:
         print(f"Error fetching or parsing JSON: {e}")
         manualCheckJSON = []
@@ -163,8 +178,10 @@ def parse_JSON_Database():
             niconicoAndVocaloid.append(item.get('title'))
         elif item.get('catcode') == 'オンゲキ＆CHUNITHM':
             ongekiAndChunithm.append(item.get('title'))
+        else:
+            print(f"Unknown catcode: {item.get('catcode')}\n Title: {item.get('title')}")
 
-    return maimaiSongInfoJSON, manualCheckJSON
+    return maimaiSongInfoJSON, zerataku_maimai_songlist_JSON, manualCheckJSON
 
 
 def parse_maidata(filepath):
@@ -260,6 +277,7 @@ def proces_toGenre(root_path, maimaiSongInfoJSON, manualCheckJSON, catcode):
             print(f"{root_path}/levels/ is not empty")
             print(f"deleting {root_path}/levels/")
             shutil.rmtree(root_path + "/levels/")
+            # modify to say a different folder name instead of /levels at line 374
 
     for root, dirs, files in os.walk(root_path):
         for folder in dirs:
@@ -372,13 +390,24 @@ def proces_toGenre(root_path, maimaiSongInfoJSON, manualCheckJSON, catcode):
                 unknownHandler(os.path.basename(savedPaths), savedPaths, catcode)
                 continue
             else:
-                os.makedirs(root_path+"/levels/" + catcode[savedFolderPaths.index(category)] + "/" + os.path.basename(savedPaths), exist_ok=True)
+                os.makedirs(root_path + catcode[savedFolderPaths.index(category)] + "/" + os.path.basename(savedPaths), exist_ok=True)
                 try:
-                    shutil.copytree(savedPaths, root_path + "/levels/" + catcode[savedFolderPaths.index(category)] + "/" + os.path.basename(savedPaths), dirs_exist_ok=True)
+                    shutil.copytree(savedPaths, root_path + catcode[savedFolderPaths.index(category)] + "/" + os.path.basename(savedPaths), dirs_exist_ok=True)
                 except:
                     print(f"Error: Copy failed: {savedPaths}")
                     debugging.write(f"Error: Copy failed: {savedPaths} to Output folder\n")
                 print(f"copied to {catcode[savedFolderPaths.index(category)]}: {savedPaths}")
+
+                # removed the creation of the levels folder and instead creates the genre folders in the root path
+                # unfortunately, the original charts do still exist as this program just copies them to the genre folders
+                # the original charts are not deleted
+                # implement a way to first have program un-nest the folders first, 
+                #   then create backup collection.json files to be used for reverting changes
+                # either to generate it first using the function generate_manifest 
+                #   or use the data.json from zerataku's database of maimai songs to organize them as 
+                #   necesseary by version again as a way to revert back after organizing by genre
+
+        
 
 # Start of the program
 os.makedirs("logging", exist_ok=True)
@@ -396,9 +425,10 @@ maimaiSongInfoJSON = []
 manualCheckJSON = []
 
 manualCheckURL = "https://raw.githubusercontent.com/VenB304/AstroDX-Collection-Genre-Reorganizer/main/manualCheck.json"
+zerataku_maimai_songlist_URL = ""
 maimai_JP_songlist_URL = "https://maimai.sega.jp/data/maimai_songs.json"
 
-maimaiSongInfoJSON, manualCheckJSON = parse_JSON_Database()
+maimaiSongInfoJSON, zerataku_maimai_songlist_JSON, manualCheckJSON = parse_JSON_Database()
 
 
 running = True
@@ -408,6 +438,15 @@ while running:
     print("[1] Check folders only for GENRE grouping (check if your copied path is correct)")
     print("[2] Check folders for GENRE grouping and copy to Output folder")
     print("[3] Generate collection.json files")
+    # list of what i wanna do now
+    # 1. Perform CHeck: check folders only for genre grouping and displays the genre it belongs to
+    # 2. Perform organize into Genre: checks and takes a list matched and unidentified folders, copies the content of matched folders to genre folders, and user can choose what to do with unidentified folders
+    # 2.1 also implement to copy or to move the files to the genre folders and makes it so that the will be unnested
+    # 3. Restructure Collection: generate collection.json files and unnests the folders from path to be used for newer beta 2.0 of AstroDX
+    # 4. Restructure Collection for pre beta: reads collection.json files and restructures the folders to be nested for pre beta versions of AstroDX(ehem, apple devices hehe[this could become outdated as fumi might update for apple deviced any time now])
+    # 5. backup: use generate_manifest to create a backup of the current collection and to be used to revert back to the original collections
+    # 6. restore: use the backup collection.json files to revert back to the original collections
+
     print("[0] Exit")
 
     choice = str(input("Enter the number you wanna do: "))
