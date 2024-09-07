@@ -25,15 +25,16 @@ Sorts charts under a path into of the following genre categories:
 1. pop and anime
 2. niconico and vocaloid
 3. touhou project
-4. maimai
-5. ongeki and chunithm
-6. Utage
-7. Chinese pop
-8. Unknown (in cases where it cannot find a genre to where it matches)
+4. game and variety
+5. maimai
+6. ongeki and chunithm
+7. Utage
+8. Chinese pop
+9. Unknown (in cases where it cannot find a genre to where it matches)
 
-Current status of the program is functional with the only 3 options it has.
-
-is able to categorize all the available charts for AstroDX as of September 5, 2024
+- able to categorize charts to genre as of September 5, 2024
+- mostly able to categorize charts to version as of Semptember 8, 2024
+  - could not account for 105, waiting for version_manualCheck.json to be filled up
 
 ## Description
 
@@ -79,7 +80,7 @@ To use the AstroDX Collection Genre Reorganizer, follow these steps:
  - Sample path: C:/Users/username/Downloads/maisquared/"
  - inside the maisquared folder, there should be folders with maidata.txt files
  - after the program is finished, inside the levels folder there should be genre folders like pop and anime, niconico and vocaloid, etc.
- - In the event this program encounters unidentified charts, you can choose the option to paste them in the "Unidentified" Folder, manually choose a genre to paste it in, or Log the chart in "unidentifiedCharts.txt" and ignor.
+ - In the event this program encounters unidentified charts, you can choose the option to paste them in the "Unidentified" Folder, manually choose a genre to paste it in, or Log the chart in "unidentifiedCharts.txt" and ignore.
 
 [3] Generate collection.json files
  - generates the necessary collection.json files to be used for AstroDX
