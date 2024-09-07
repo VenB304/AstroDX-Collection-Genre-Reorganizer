@@ -627,99 +627,100 @@ def check_toVersion(root_path, versionCode, zetaraku_maimai_songlist_JSON):
             if os.path.isfile(maidata_path):
                 lv_7_value, title_value = parse_maidata(maidata_path)
                 print(f"&title:\t\t{title_value}")
+                temp_title_value = title_value
                 if title_value.startswith("["):
-                    title_value = title_value.replace("[","(").replace("]",")")
-                    print(f"replaced title value: {title_value}")
+                    temp_title_value = title_value.replace("[","(").replace("]",")")
+                    print(f"replaced title value: {temp_title_value}")
 
-                if title_value in maimai or folder in maimai:
+                if temp_title_value in maimai or folder in maimai:
                     print(f"matched to in zetaraku_maimai_songlist_JSON: maimai")
                     checkmaimai.append(title_value)
 
-                elif title_value in maimai_PLUS or folder in maimai_PLUS:
+                elif temp_title_value in maimai_PLUS or folder in maimai_PLUS:
                     print(f"matched to in zetaraku_maimai_songlist_JSON: maimai PLUS")
                     checkmaimai_PLUS.append(title_value)
 
-                elif title_value in GreeN or folder in GreeN:
+                elif temp_title_value in GreeN or folder in GreeN:
                     print(f"matched to in zetaraku_maimai_songlist_JSON: GreeN")
                     checkGreeN.append(title_value)
 
-                elif title_value in GreeN_PLUS or folder in GreeN_PLUS:
+                elif temp_title_value in GreeN_PLUS or folder in GreeN_PLUS:
                     print(f"matched to in zetaraku_maimai_songlist_JSON: GreeN PLUS")
                     checkGreeN_PLUS.append(title_value)
 
-                elif title_value in ORaNGE or folder in ORaNGE:
+                elif temp_title_value in ORaNGE or folder in ORaNGE:
                     print(f"matched to in zetaraku_maimai_songlist_JSON: ORANGE")
                     checkORaNGE.append(title_value)
 
-                elif title_value in ORaNGE_PLUS or folder in ORaNGE_PLUS:
+                elif temp_title_value in ORaNGE_PLUS or folder in ORaNGE_PLUS:
                     print(f"matched to in zetaraku_maimai_songlist_JSON: ORANGE PLUS")
                     checkORaNGE_PLUS.append(title_value)
 
-                elif title_value in PiNK or folder in PiNK:
+                elif temp_title_value in PiNK or folder in PiNK:
                     print(f"matched to in zetaraku_maimai_songlist_JSON: PiNK")
                     checkPiNK.append(title_value)
 
-                elif title_value in PiNK_PLUS or folder in PiNK_PLUS:
+                elif temp_title_value in PiNK_PLUS or folder in PiNK_PLUS:
                     print(f"matched to in zetaraku_maimai_songlist_JSON: PiNK PLUS")
                     checkPiNK_PLUS.append(title_value)
 
-                elif title_value in MURASAKi or folder in MURASAKi:
+                elif temp_title_value in MURASAKi or folder in MURASAKi:
                     print(f"matched to in zetaraku_maimai_songlist_JSON: MURASAKi")
                     checkMURASAKi.append(title_value)
 
-                elif title_value in MURASAKi_PLUS or folder in MURASAKi_PLUS:
+                elif temp_title_value in MURASAKi_PLUS or folder in MURASAKi_PLUS:
                     print(f"matched to in zetaraku_maimai_songlist_JSON: MURASAKi PLUS")
                     checkMURASAKi_PLUS.append(title_value)
 
-                elif title_value in MiLK or folder in MiLK:
+                elif temp_title_value in MiLK or folder in MiLK:
                     print(f"matched to in zetaraku_maimai_songlist_JSON: MiLK")
                     checkMiLK.append(title_value)
 
-                elif title_value in MiLK_PLUS or folder in MiLK_PLUS:
+                elif temp_title_value in MiLK_PLUS or folder in MiLK_PLUS:
                     print(f"matched to in zetaraku_maimai_songlist_JSON: MiLK PLUS")
                     checkMiLK_PLUS.append(title_value)
 
-                elif title_value in FiNALE or folder in FiNALE:
+                elif temp_title_value in FiNALE or folder in FiNALE:
                     print(f"matched to in zetaraku_maimai_songlist_JSON: FiNALE")
                     checkFiNALE.append(title_value)
 
-                elif title_value in Deluxe or folder in Deluxe:
+                elif temp_title_value in Deluxe or folder in Deluxe:
                     print(f"matched to in zetaraku_maimai_songlist_JSON: DX")
                     checkDeluxe.append(title_value)
 
-                elif title_value in Deluxe_PLUS or folder in Deluxe_PLUS:
+                elif temp_title_value in Deluxe_PLUS or folder in Deluxe_PLUS:
                     print(f"matched to in zetaraku_maimai_songlist_JSON: DX PLUS")
                     checkDeluxe_PLUS.append(title_value)
 
-                elif title_value in Splash or folder in Splash:
+                elif temp_title_value in Splash or folder in Splash:
                     print(f"matched to in zetaraku_maimai_songlist_JSON: Splash")
                     checkSplash.append(title_value)
 
-                elif title_value in Splash_PLUS or folder in Splash_PLUS:
+                elif temp_title_value in Splash_PLUS or folder in Splash_PLUS:
                     print(f"matched to in zetaraku_maimai_songlist_JSON: Splash PLUS")
                     checkSplash_PLUS.append(title_value)
 
-                elif title_value in UNiVERSE or folder in UNiVERSE:
+                elif temp_title_value in UNiVERSE or folder in UNiVERSE:
                     print(f"matched to in zetaraku_maimai_songlist_JSON: UNiVERSE")
                     checkUNiVERSE.append(title_value)
 
-                elif title_value in UNiVERSE_PLUS or folder in UNiVERSE_PLUS:
+                elif temp_title_value in UNiVERSE_PLUS or folder in UNiVERSE_PLUS:
                     print(f"matched to in zetaraku_maimai_songlist_JSON: UNiVERSE PLUS")
                     checkUNiVERSE_PLUS.append(title_value)
 
-                elif title_value in FESTiVAL or folder in FESTiVAL:
+                elif temp_title_value in FESTiVAL or folder in FESTiVAL:
                     print(f"matched to in zetaraku_maimai_songlist_JSON: FESTiVAL")
                     checkFESTiVAL.append(title_value)
 
-                elif title_value in FESTiVAL_PLUS or folder in FESTiVAL_PLUS:
+                elif temp_title_value in FESTiVAL_PLUS or folder in FESTiVAL_PLUS:
                     print(f"matched to in zetaraku_maimai_songlist_JSON: FESTiVAL PLUS")
                     checkFESTiVAL_PLUS.append(title_value)
 
-                elif title_value in BUDDiES or folder in BUDDiES:
+                elif temp_title_value in BUDDiES or folder in BUDDiES:
                     print(f"matched to in zetaraku_maimai_songlist_JSON: BUDDiES")
                     checkBUDDiES.append(title_value)
 
-                elif title_value in BUDDiES_PLUS or folder in BUDDiES_PLUS:
+                elif temp_title_value in BUDDiES_PLUS or folder in BUDDiES_PLUS:
                     print(f"matched to in zetaraku_maimai_songlist_JSON: BUDDiES PLUS")
                     checkBUDDiES_PLUS.append(title_value)
 
