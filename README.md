@@ -60,13 +60,12 @@ more chatgpt bs, raahhhhh
 To install the AstroDX Collection Genre Reorganizer, follow these steps:
 
 1. DOwnload whole project (Code > DOwnload Zip): this will most like be more updated than release executable 
-   - OR use a latest release executable
 
 ## Usage
 
 To use the AstroDX Collection Genre Reorganizer, follow these steps:
 
-1. execute main.py in your command line or the executable
+1. execute main.py in your command line
 2. follow on console instructions
 
 [1] Check folders only for GENRE grouping
