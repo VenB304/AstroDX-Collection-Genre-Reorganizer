@@ -179,7 +179,10 @@ def parse_JSON_Database():
         elif item.get('catcode') == 'オンゲキ＆CHUNITHM':
             ongekiAndChunithm.append(item.get('title'))
         else:
-            print(f"Unknown catcode: {item.get('catcode')}\n Title: {item.get('title')}")
+            if item.get('catcode') == '宴会場':
+                continue
+            else:
+                debugging.write(f"Unknown catcode: {item.get('catcode')}\n Title: {item.get('title')}")
 
     return maimaiSongInfoJSON, zerataku_maimai_songlist_JSON, manualCheckJSON
 
@@ -200,72 +203,125 @@ def parse_maidata(filepath):
     return lv_7_value, title_value
 
 def check_only_folders(root_path,maimaiSongInfoJSON,manualCheckJSON):
+    checkPop, checkVocaloid, checkTouhou, checkGame, checkMaimai, checkOngeki, checkUtage, checkChinese, checkUnidentified = [],[],[],[],[],[],[],[],[]
     for root, dirs, files in os.walk(root_path):
         for folder in dirs:
             folder_path = os.path.join(root, folder)
             maidata_path = os.path.join(folder_path, 'maidata.txt')
             
+            
             if os.path.isfile(maidata_path):
                 lv_7_value, title_value = parse_maidata(maidata_path)
                 print(f"&title:\t\t{title_value}")
 
+
                 if lv_7_value:
                     print(f"matched to in maimaiJSON: \tutage")
-
+                    checkUtage.append(title_value)
                 elif title_value in popAndAnime or folder in popAndAnime:
                     print(f"matched to maimaiJSON: \tpop and anime")
+                    checkPop.append(title_value)
 
                 elif title_value in niconicoAndVocaloid or folder in niconicoAndVocaloid:
                     print(f"matched to maimaiJSON: \tniconico and vocaloid")
+                    checkVocaloid.append(title_value)
 
                 elif title_value in touhouProject or folder in touhouProject:
                     print(f"matched to maimaiJSON: \ttouhou project")
+                    checkTouhou.append(title_value)
 
                 elif title_value in gameAndVariety or folder in gameAndVariety:
                     print(f"matched to maimaiJSON: \tgame and variety")
+                    checkGame.append(title_value)
 
                 elif title_value in maimai or folder in maimai:
                     print(f"matched to maimaiJSON: \tmaimai")
+                    checkMaimai.append(title_value)
                 
                 elif title_value in ongekiAndChunithm or folder in ongekiAndChunithm:
                     print(f"matched to maimaiJSON: \tongeki and chunithm")
+                    checkOngeki.append(title_value)
                 
                 else:
                     if title_value in manualCheckJSON:
                         if manualCheckJSON[title_value] == "POPS＆アニメ":
                             print(f"matched to manualCheckJSON: \tpop and anime")
+                            checkPop.append(title_value)
 
                         elif manualCheckJSON[title_value] == "niconico＆ボーカロイド":
                             print(f"matched to manualCheckJSON: \tniconico and vocaloid")
+                            checkVocaloid.append(title_value)
 
                         elif manualCheckJSON[title_value] == "東方Project":
                             print(f"matched to manualCheckJSON: \ttouhou project")
+                            checkTouhou.append(title_value)
 
                         elif manualCheckJSON[title_value] == "ゲーム＆バラエティ":
                             print(f"matched to manualCheckJSON: \tgame and variety")
+                            checkGame.append(title_value)
 
                         elif manualCheckJSON[title_value] == "maimai":
                             print(f"matched to manualCheckJSON: \tmaimai")
+                            checkMaimai.append(title_value)
 
                         elif manualCheckJSON[title_value] == "オンゲキ＆CHUNITHM":
                             print(f"matched to manualCheckJSON: \tongeki and chunithm")
+                            checkOngeki.append(title_value)
 
                         elif manualCheckJSON[title_value] == "中国流行乐":
                             print(f"matched to manualCheckJSON: \tchinese pop")
+                            checkChinese.append(title_value)
 
                         elif manualCheckJSON[title_value] == "宴会場":
                             print(f"matched to manualCheckJSON: \tutage")
+                            checkUtage.append(title_value)
 
                         else:
                             print(f"{title_value} found in manual check, value empty, @venb304 please update manualCheck.json")
+                            checkUnidentified.append(title_value)
                     else:
                         if title_value:
                             print(title_value + " not match, Unidentified genre")
+                            checkUnidentified.append(title_value)
                         else:
                             print(f"No title found, Unidentified genre in {folder_path}")
+                            checkUnidentified.append(folder_path)
                 
             else:
                 print(f"{folder_path} is empty, moving on")
+    checkLog = open("logging/checkingLog.txt","w", encoding="utf-8-sig")
+    checkLog.write("Check only Log, the following are the folders that are matched to the genre\n")
+    checkLog.write("Pop and Anime:\n")
+    for item in checkPop:
+        checkLog.write(f"\t{item}\n")
+    checkLog.write("Niconico and Vocaloid:\n")
+    for item in checkVocaloid:
+        checkLog.write(f"\t{item}\n")
+    checkLog.write("Touhou Project:\n")
+    for item in checkTouhou:
+        checkLog.write(f"\t{item}\n")
+    checkLog.write("Game and Variety:\n")
+    for item in checkGame:
+        checkLog.write(f"\t{item}\n")
+    checkLog.write("Maimai:\n")
+    for item in checkMaimai:
+        checkLog.write(f"\t{item}\n")
+    checkLog.write("Ongeki and Chunithm:\n")
+    for item in checkOngeki:
+        checkLog.write(f"\t{item}\n")
+    checkLog.write("Utage:\n")
+    for item in checkUtage:
+        checkLog.write(f"\t{item}\n")
+    checkLog.write("Chinese Pop:\n")
+    for item in checkChinese:
+        checkLog.write(f"\t{item}\n")
+    checkLog.write("Unidentified:\n")
+    for item in checkUnidentified:
+        checkLog.write(f"\t{item}\n")
+
+    checkLog.write("If no charts falls under unidentified, then the collections are supported and is able to be reorganized properly and automatically.\n")
+    checkLog.close()
+
 
 def proces_toGenre(root_path, maimaiSongInfoJSON, manualCheckJSON, catcode):
     savedFolderPaths = [[],[],[],[],[],[],[],[],[]]
@@ -421,11 +477,13 @@ gameAndVariety = []
 maimai = []
 ongekiAndChunithm = []
 catcode = [["POPS＆アニメ", "niconico＆ボーカロイド", "東方Project", "ゲーム＆バラエティ", "maimai", "オンゲキ＆CHUNITHM", "宴会場", "中国流行乐","UNIDENTIFEIED"],["POPS ＆ ANIME", "niconico＆VOCALOID", "TOUHOU Project", "GAME ＆ VARIETY", "maimai", "ONGKEI ＆ CHUNITHM", "UTAGE", "CHINESE-POP","UNIDENTIFIED"]]
+
 maimaiSongInfoJSON = []
 manualCheckJSON = []
+zerataku_maimai_songlist_JSON = []
 
 manualCheckURL = "https://raw.githubusercontent.com/VenB304/AstroDX-Collection-Genre-Reorganizer/main/manualCheck.json"
-zerataku_maimai_songlist_URL = ""
+zerataku_maimai_songlist_URL = "https://raw.githubusercontent.com/VenB304/AstroDX-Collection-Reorganizer/main/zetaraku_maimai_songlist.json"
 maimai_JP_songlist_URL = "https://maimai.sega.jp/data/maimai_songs.json"
 
 maimaiSongInfoJSON, zerataku_maimai_songlist_JSON, manualCheckJSON = parse_JSON_Database()
@@ -453,18 +511,12 @@ while running:
 
     match choice:
         case "1":
-            print("Checking folders only for GENRE grouping")
-            print("this will not copy to levels folder")
             print("Sample path: C:/Users/username/Downloads/maisquared/")
             root_path = input("Enter the root directory path: ").strip()
+            os.system('cls')
             check_only_folders(root_path,maimaiSongInfoJSON,manualCheckJSON)
         case "2":
-            print("Checking folders for GENRE grouping and copy to Output folder")
-            print("this will copy to levels folder within the same root directory/path you input")
             print("Sample path: C:/Users/username/Downloads/maisquared/")
-            print("inside the maisquared folder, there should be folders with maidata.txt files")
-            print("this will generate a new folder called 'levels'")
-            print("after the program is finished, inside the levels folder there should be genre folders like pop and anime, niconico and vocaloid, etc.")
             root_path = input("Enter the root directory path: ").strip()
             langChosen = False
             while not langChosen:
