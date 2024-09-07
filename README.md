@@ -1,26 +1,9 @@
 To do list maybe:
-- ~~Complete and maintain mapping json~~
-  - Maintain manualCheck.json for updates
-- Collection manager with this json thingies for the game
-  - a way to revert them into grouping by version or a custom made by the user if ever needed
-- ~~unknown handler~~
-  - what you wanna do, trash, keep to unknown folder or choose where(only able to copy to unknown folder for now)
-- collection manager
-  - move copy remove add charts to a collection 
-- maybe learn how this shit works and maybe, just maybe I get better and stop relying on chatgpt
-
-User usage to do list
-1. Perform CHeck: check folders only for genre grouping and displays the genre it belongs to
-2. Perform organize into Genre: checks and takes a list matched and unidentified folders, copies the content of matched folders to genre folders, and user can choose what to do with unidentified folders
-   - also implement to copy or to move the files to the genre folders and makes it so that the will be unnested
-3. Restructure Collection: generate collection.json files and unnests the folders from path to be used for newer beta 2.0 of AstroDX
-4. Restructure Collection for pre beta: reads collection.json files and restructures the folders to be nested for pre beta versions of AstroDX(ehem, apple devices hehe[this could become outdated as fumi might update for apple deviced any time now])
-5. backup: use generate_manifest to create a backup of the current collection and to be used to revert back to the original collections
-6. restore: use the backup collection.json files to revert back to the original collections
+- update version_manualCheck.json to support the currently 105 charts that did not work
 
 # AstroDX Collection Genre Reorganizer
 
-Sorts charts under a path into of the following genre categories:
+groups charts under a path into of the following genre categories:
 
 1. pop and anime
 2. niconico and vocaloid
@@ -32,9 +15,13 @@ Sorts charts under a path into of the following genre categories:
 8. Chinese pop
 9. Unknown (in cases where it cannot find a genre to where it matches)
 
-- able to categorize charts to genre as of September 5, 2024
-- mostly able to categorize charts to version as of Semptember 8, 2024
-  - could not account for 105, waiting for version_manualCheck.json to be filled up
+Groups charts under a path into the following version categories
+ - up to Buddies plus
+
+Status
+ - able to categorize charts to genre as of September 5, 2024
+ - mostly able to categorize charts to version as of Semptember 8, 2024
+   - could not account for 105, waiting for version_manualCheck.json to be filled up
 
 ## Description
 
@@ -69,27 +56,36 @@ To use the AstroDX Collection Genre Reorganizer, follow these steps:
 1. execute main.py in your command line
 2. follow on console instructions
 
-[1] Check folders only for GENRE grouping
- - Checks folders from the path you input for GENRE grouping, and verify if all the charts was successfully categorized, if not, the unidentified charts will be tagged as Unidentified Genere
- - this will not copy to levels folder
+[1] Check given path if compatible for GENRE GROUPING (folder structure is ignored, only checks for maidata.txt)
+ - Checks folders from the path you input for GENRE grouping, and verify if all the charts was successfully categorized, if not, the unidentified charts will be tagged as Unidentified and logged in checkLog.txt
+ - 
+[2] Check given path if compatible for VERSION GROUPING (if you want to go back to version grouping from genre grouping)
+ - Checks folders from the path you input for VERSION grouping, and verify if all the charts was successfully categorized, if not, the unidentified charts will be tagged as Unidentified and logged in checkLog.txt
+ - 
+[3] Restructure into GENRE GROUPING (folder structure is ignored as it moved folders with maidata.txt to genre folders)
+ - CHecks folders for GENRE grouping and saves folder path
+ - this will copy or move the charts if users decides
  - Sample path: C:/Users/username/Downloads/maisquared/"
-
-[2] Check folders for GENRE grouping and copy to Output folder
- - CHecks folders for GENRE grouping and copies the identified folders and paste it in a new folder "levels"
- - this will copy to levels folder within the same root directory/path you input"
- - Sample path: C:/Users/username/Downloads/maisquared/"
- - inside the maisquared folder, there should be folders with maidata.txt files
- - after the program is finished, inside the levels folder there should be genre folders like pop and anime, niconico and vocaloid, etc.
+ - after the program is finished, inside the given path, there should be genre folders like pop and anime, niconico and vocaloid, etc.
  - In the event this program encounters unidentified charts, you can choose the option to paste them in the "Unidentified" Folder, manually choose a genre to paste it in, or Log the chart in "unidentifiedCharts.txt" and ignore.
 
-[3] Generate collection.json files
- - generates the necessary collection.json files to be used for AstroDX
- - this will generate collection.json files and saves them to "output" folder
- - Sample root path: C:/Users/username/Downloads/maisquared/levels/
- - inside the levels folder or any folder, there should be genre folders like pop and anime, niconico and vocaloid, etc.
-   - can also be used for normal grouping by version, or grouped according to user.
+[4] Restructure into VERSION GROUPING (folder structure is ignored as it moved folders with maidata.txt to version folders)
+ - To be implemented
 
- (To maintainer of this project, update usage to allow users to better understand how to use the program)
+[5] For Beta 2.0: Generate ADX Archives (use option[3] or [4] for this for easy importing to AstroDX)\n\t(Warning: Only use if the charts totals to 2gb or less, bigger sizes is not supported as of Beta 2 Patch 5)
+- given path should have GENRE or VERSION folders.
+- creates an ADX Archive to be used for AstroDX
+- ADX archives bigger than 2gb are current not support as the game is coded for the original zip format, zip64 soon maybe, fumi pls T_T
+
+[6] For Beta 2.0: With the give path, generates the manifest.json files and levels structure to be used for the newer beta 2.0 of AstroDX\n\t(Note: this is your best option to use for now, without zip64 support for astrodx, this is the only way to reorganize the collection)
+ - for each GENRE or VERSION(can also be called collection) it records the charts within that collection and uses that to generate collection.manifest files to be used for Beta 2.0 AstroDX
+ - Also restructure/unnests the folders, within the given path, you should see a collection folder, and levels folder. The content of each are to be pasted in the respective folders within AstroDX
+ - You can choose to add a GUID(random letters and numbers) at the end of each folder names of the charts
+ - You can choose to copy or move them.
+
+[7] For Pre Beta: Restructure for pre beta (Note: options [2] and [4] is already structured for pre beta, if current structure is for beta 2.0, use this to revert back to import)
+ - Converts Beta 2.0 compatible folder structures into the older pre beta folder structure
+ - to be Implemented
 
 ## Attribution
 
