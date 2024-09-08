@@ -360,77 +360,80 @@ def parse_JSON_Database():
         print("Parsing genre and version information")
 
         for item in maimaiSongInfoJSON:
-            if item.get('catcode') == 'maimai':
-                maimai.append(item.get('title'))
-            elif item.get('catcode') == 'POPS＆アニメ':
-                popAndAnime.append(item.get('title'))
-            elif item.get('catcode') == 'ゲーム＆バラエティ':
-                gameAndVariety.append(item.get('title'))
-            elif item.get('catcode') == '東方Project':
-                touhouProject.append(item.get('title'))
-            elif item.get('catcode') == 'niconico＆ボーカロイド':
-                niconicoAndVocaloid.append(item.get('title'))
-            elif item.get('catcode') == 'オンゲキ＆CHUNITHM':
-                ongekiAndChunithm.append(item.get('title'))
-            else:
-                if item.get('catcode') == '宴会場':
+            getCategory = item.get('catcode')
+            getTitle = item.get('title')
+            match getCategory:
+                case "maimai":
+                    testCategories["maimai"].append(getTitle)
+                case "POPS＆アニメ":
+                    testCategories["popAndAnime"].append(getTitle)
+                case "ゲーム＆バラエティ":
+                    testCategories["gameAndVariety"].append(getTitle)
+                case "東方Project":
+                    testCategories["touhouProject"].append(getTitle)
+                case "niconico＆ボーカロイド":
+                    testCategories["niconicoAndVocaloid"].append(getTitle)
+                case "オンゲキ＆CHUNITHM":
+                    testCategories["ongekiAndChunithm"].append(getTitle)
+                case "宴会場":
                     continue
-                else:
-                    debugging.write(f"Unknown catcode: {item.get('catcode')}\n Title: {item.get('title')}")
+                case "_":
+                    debugging.write(f"Unknown catcode: {item.get('catcode')}\n Title: {getTitle}")
+        
         print("Genre information parsed")
 
         for item in zetaraku_maimai_songlist_JSON["songs"]:
-            if item.get('version') == 'maimai':
-                maimai.append(item.get('title'))
-            elif item.get('version') == 'maimai PLUS':
-                maimai_PLUS.append(item.get('title'))
-            elif item.get('version') == 'GreeN':
-                GreeN.append(item.get('title'))
-            elif item.get('version') == 'GreeN PLUS':
-                GreeN_PLUS.append(item.get('title'))
-            elif item.get('version') == 'ORANGE':
-                ORaNGE.append(item.get('title'))
-            elif item.get('version') == 'ORANGE PLUS':
-                ORaNGE_PLUS.append(item.get('title'))
-            elif item.get('version') == 'PiNK':
-                PiNK.append(item.get('title'))
-            elif item.get('version') == 'PiNK PLUS':
-                PiNK_PLUS.append(item.get('title'))
-            elif item.get('version') == 'MURASAKi':
-                MURASAKi.append(item.get('title'))
-            elif item.get('version') == 'MURASAKi PLUS':
-                MURASAKi_PLUS.append(item.get('title'))
-            elif item.get('version') == 'MiLK':
-                MiLK.append(item.get('title'))
-            elif item.get('version') == 'MiLK PLUS':
-                MiLK_PLUS.append(item.get('title'))
-            elif item.get('version') == 'FiNALE':
-                FiNALE.append(item.get('title'))
-            elif item.get('version') == 'maimaiでらっくす':
-                Deluxe.append(item.get('title'))
-            elif item.get('version') == 'maimaiでらっくす PLUS':
-                Deluxe_PLUS.append(item.get('title'))
-            elif item.get('version') == 'Splash':
-                Deluxe.append(item.get('title'))
-            elif item.get('version') == 'Splash PLUS':
-                Splash_PLUS.append(item.get('title'))
-            elif item.get('version') == 'UNiVERSE':
-                UNiVERSE.append(item.get('title'))
-            elif item.get('version') == 'UNiVERSE PLUS':
-                UNiVERSE_PLUS.append(item.get('title'))
-            elif item.get('version') == 'FESTiVAL':
-                FESTiVAL.append(item.get('title'))
-            elif item.get('version') == 'FESTiVAL PLUS':
-                FESTiVAL_PLUS.append(item.get('title'))
-            elif item.get('version') == 'BUDDiES':
-                BUDDiES.append(item.get('title'))
-            elif item.get('version') == 'BUDDiES PLUS':
-                BUDDiES_PLUS.append(item.get('title'))
-            else:
-                if item.get('version') == '':
-                    continue
-                else:
-                    debugging.write(f"parse_JSON_Database() Unknown version: {item.get('version')} Title: {item.get('title')}\n")
+            getVersion = item.get('version')
+            getTitle = item.get('title')
+            match getVersion:
+                case "maimai":
+                    maimai.append(getTitle)
+                case "maimai PLUS":
+                    maimai_PLUS.append(getTitle)
+                case "GreeN":
+                    GreeN.append(getTitle)
+                case "GreeN PLUS":
+                    GreeN_PLUS.append(getTitle)
+                case "ORANGE":
+                    ORaNGE.append(getTitle)
+                case "ORANGE PLUS":
+                    ORaNGE_PLUS.append(getTitle)
+                case "PiNK":
+                    PiNK.append(getTitle)
+                case "PiNK PLUS":
+                    PiNK_PLUS.append(getTitle)
+                case "MURASAKi":
+                    MURASAKi.append(getTitle)
+                case "MURASAKi PLUS":
+                    MURASAKi_PLUS.append(getTitle)
+                case "MiLK":
+                    MiLK.append(getTitle)
+                case "MiLK PLUS":
+                    MiLK_PLUS.append(getTitle)
+                case "FiNALE":
+                    FiNALE.append(getTitle)
+                case "maimaiでらっくす":
+                    Deluxe.append(getTitle)
+                case "maimaiでらっくす PLUS":
+                    Deluxe_PLUS.append(getTitle)
+                case "Splash":
+                    Deluxe.append(getTitle)
+                case "Splash PLUS":
+                    Splash_PLUS.append(getTitle)
+                case "UNiVERSE":
+                    UNiVERSE.append(getTitle)
+                case "UNiVERSE PLUS":
+                    UNiVERSE_PLUS.append(getTitle)
+                case "FESTiVAL":
+                    FESTiVAL.append(getTitle)
+                case "FESTiVAL PLUS":
+                    FESTiVAL_PLUS.append(getTitle)
+                case "BUDDiES":
+                    BUDDiES.append(getTitle)
+                case "BUDDiES PLUS":
+                    BUDDiES_PLUS.append(getTitle)
+                case "_":
+                    debugging.write(f"Unknown version: {item.get('version')} Title: {getTitle}\n")
         print("Version information parsed")
         print("Parsing complete")
 
@@ -462,86 +465,73 @@ def check_toGenre(root_path,maimaiSongInfoJSON,genre_manualCheckJSON):
             if os.path.isfile(maidata_path):
                 lv_7_value, title_value = parse_maidata(maidata_path)
                 print(f"&title:\t\t{title_value}")
-
                 if lv_7_value:
                     print(f"matched to in maimaiJSON: \tutage")
                     checkUtage.append(title_value)
-
-                elif title_value in popAndAnime or folder in popAndAnime:
-                    print(f"matched to maimaiJSON: \tpop and anime")
-                    checkPop.append(title_value)
-
-                elif title_value in niconicoAndVocaloid or folder in niconicoAndVocaloid:
-                    print(f"matched to maimaiJSON: \tniconico and vocaloid")
-                    checkVocaloid.append(title_value)
-
-                elif title_value in touhouProject or folder in touhouProject:
-                    print(f"matched to maimaiJSON: \ttouhou project")
-                    checkTouhou.append(title_value)
-
-                elif title_value in gameAndVariety or folder in gameAndVariety:
-                    print(f"matched to maimaiJSON: \tgame and variety")
-                    checkGame.append(title_value)
-
-                elif title_value in maimai or folder in maimai:
-                    print(f"matched to maimaiJSON: \tmaimai")
-                    checkMaimai.append(title_value)
-                
-                elif title_value in ongekiAndChunithm or folder in ongekiAndChunithm:
-                    print(f"matched to maimaiJSON: \tongeki and chunithm")
-                    checkOngeki.append(title_value)
-                
-                else:
-                    if title_value in genre_manualCheckJSON:
-                        if genre_manualCheckJSON[title_value] == "POPS＆アニメ":
-                            print(f"matched to genre_manualCheckJSON: \tpop and anime")
-                            checkPop.append(title_value)
-
-                        elif genre_manualCheckJSON[title_value] == "niconico＆ボーカロイド":
-                            print(f"matched to genre_manualCheckJSON: \tniconico and vocaloid")
-                            checkVocaloid.append(title_value)
-
-                        elif genre_manualCheckJSON[title_value] == "東方Project":
-                            print(f"matched to genre_manualCheckJSON: \ttouhou project")
-                            checkTouhou.append(title_value)
-
-                        elif genre_manualCheckJSON[title_value] == "ゲーム＆バラエティ":
-                            print(f"matched to genre_manualCheckJSON: \tgame and variety")
-                            checkGame.append(title_value)
-
-                        elif genre_manualCheckJSON[title_value] == "maimai":
-                            print(f"matched to genre_manualCheckJSON: \tmaimai")
-                            checkMaimai.append(title_value)
-
-                        elif genre_manualCheckJSON[title_value] == "オンゲキ＆CHUNITHM":
-                            print(f"matched to genre_manualCheckJSON: \tongeki and chunithm")
-                            checkOngeki.append(title_value)
-
-                        elif genre_manualCheckJSON[title_value] == "中国流行乐":
-                            print(f"matched to genre_manualCheckJSON: \tchinese pop")
-                            checkChinese.append(title_value)
-
-                        elif genre_manualCheckJSON[title_value] == "宴会場":
-                            print(f"matched to genre_manualCheckJSON: \tutage")
-                            checkUtage.append(title_value)
-
-                        else:
-                            print(f"{title_value} found in manual check, value empty, @venb304 please update manualCheck.json")
-                            checkUnidentifiedGenre.append(title_value)
+                    continue
+                matchFound = False
+                for genre, song_list in testCategories.items():
+                    if title_value in song_list or folder in song_list:
+                        print(f"matched to maimaiJSON: \t{genre}")
+                        matchFounde = True
+                        match genre:
+                            case "popAndAnime":
+                                checkPop.append(title_value)
+                            case "niconicoAndVocaloid":
+                                checkVocaloid.append(title_value)
+                            case "touhouProject":
+                                checkTouhou.append(title_value)
+                            case "gameAndVariety":
+                                checkGame.append(title_value)
+                            case "maimai":
+                                checkMaimai.append(title_value)
+                            case "ongekiAndChunithm":
+                                checkOngeki.append(title_value)
+                            case _:
+                                continue 
+                        break
                     else:
-                        if title_value:
-                            print(title_value + " not match, Unidentified genre")
-                            checkUnidentifiedGenre.append(title_value)
-                            debugging.write(f"Unidentified genre: {title_value}\n lv 7 value: {lv_7_value}\n")
-                        else:
-                            print(f"No title found, Unidentified genre in {folder_path}")
-                            checkUnidentifiedGenre.append(folder_path)
-                
-            else:
-                print(f"{folder_path} is empty, moving on")
+                        continue
+                if not matchFound:
+                    if title_value in genre_manualCheckJSON:
+                        getGenre = genre_manualCheckJSON[title_value]
+                        match getGenre:
+                            case "POPS＆アニメ":
+                                print(f"matched to manual check: \tpop and anime")
+                                checkPop.append(title_value)
+                            case "niconico＆ボーカロイド":
+                                print(f"matched to manual check: \tnico and voca")
+                                checkPop.append(title_value)
+                            case "東方Project":
+                                print(f"matched to manual check: \ttouhou project")
+                                checkPop.append(title_value)
+                            case "ゲーム＆バラエティ":
+                                print(f"matched to manual check: \tgame and variety")
+                                checkPop.append(title_value)
+                            case "maimai":
+                                print(f"matched to manual check: \tmaimai")
+                                checkPop.append(title_value)
+                            case "オンゲキ＆CHUNITHM":
+                                print(f"matched to manual check: \tongeki and chuni")
+                                checkPop.append(title_value)
+                            case "中国流行乐":
+                                print(f"matched to manual check: \tchinese pop")
+                                checkPop.append(title_value)
+                            case "宴会場":
+                                print(f"matched to manual check: \t utage")
+                                checkUtage.append(title_value)
+                            case _:
+                                print(f"{title_value} found in manual check, value empty, @venb304 please update manualCheck.json")
+                                checkUnidentifiedGenre.append(title_value)
+                else:
+                    print(f"Could not find genre for {title_value}")
+                    checkUnidentifiedGenre.append(title_value)
 
+    length = (len(checkChinese)+len(checkPop)+len(checkVocaloid)+len(checkTouhou)+len(checkGame)+len(checkMaimai)+len(checkOngeki)+len(checkUtage)+len(checkUnidentifiedGenre))
+    
     checkLog = open("logging/checkingLog.txt","w", encoding="utf-8-sig")
     checkLog.write("Check only Log for genres, the following are the folders that are matched to the genre\n")
+    checkLog.write(f"Total number of charts: {length}\n")
     checkLog.write("Pop and Anime:\n")
     for item in checkPop:
         checkLog.write(f'\t"{item}":"",\n')
@@ -589,79 +579,70 @@ def proces_toGenre(root_path, genre_manualCheckJSON, catcode, operation):
                 if lv_7_value:
                     print(f"{title_value} has utage difficulty | matched to in maimaiJSON: utage")
                     savedFolderPaths[6].append(folder_path)
+                    continue
 
-                elif title_value in popAndAnime or folder in popAndAnime:
-                    print(f"{title_value} matched to maimaiJSON: pop and anime")
-                    savedFolderPaths[0].append(folder_path)
-
-                elif title_value in niconicoAndVocaloid or folder in niconicoAndVocaloid:
-                    print(f"{title_value} matched to maimaiJSON: niconico and vocaloid")
-                    savedFolderPaths[1].append(folder_path)
-
-                elif title_value in touhouProject or folder in touhouProject:
-                    print(f"{title_value} matched to maimaiJSON: touhou project")
-                    savedFolderPaths[2].append(folder_path)
-
-                elif title_value in gameAndVariety or folder in gameAndVariety:
-                    print(f"{title_value} matched to maimaiJSON: game and variety")
-                    savedFolderPaths[3].append(folder_path)
-
-                elif title_value in maimai or folder in maimai:
-                    print(f"{title_value} matched to maimaiJSON: maimai")
-                    savedFolderPaths[4].append(folder_path)
-                
-                elif title_value in ongekiAndChunithm or folder in ongekiAndChunithm:
-                    print(f"{title_value} matched to maimaiJSON: ongeki and chunithm")
-                    savedFolderPaths[5].append(folder_path)
-                
-                else:
-                    if title_value in genre_manualCheckJSON:
-                        if genre_manualCheckJSON[title_value] == "POPS＆アニメ":
-                            print(f"{title_value} matched to genre_manualCheckJSON: pop and anime")
-                            savedFolderPaths[0].append(folder_path)
-
-                        elif genre_manualCheckJSON[title_value] == "niconico＆ボーカロイド":
-                            print(f"{title_value} matched to genre_manualCheckJSON: niconico and vocaloid")
-                            savedFolderPaths[1].append(folder_path)
-
-                        elif genre_manualCheckJSON[title_value] == "東方Project":
-                            print(f"{title_value} matched to genre_manualCheckJSON: touhou project")
-                            savedFolderPaths[2].append(folder_path)
-
-                        elif genre_manualCheckJSON[title_value] == "ゲーム＆バラエティ":
-                            print(f"{title_value} matched to genre_manualCheckJSON: game and variety")
-                            savedFolderPaths[3].append(folder_path)
-
-                        elif genre_manualCheckJSON[title_value] == "maimai":
-                            print("title matched in manual check: maimai list")
-                            savedFolderPaths[4].append(folder_path)
-
-                        elif genre_manualCheckJSON[title_value] == "オンゲキ＆CHUNITHM":
-                            print("title matched in manual check: ongeki and chunithm list")
-                            savedFolderPaths[5].append(folder_path)
-
-                        elif genre_manualCheckJSON[title_value] == "中国流行乐":
-                            print("title matched in manual check: chinese pop list")
-                            savedFolderPaths[7].append(folder_path)
-
-                        elif genre_manualCheckJSON[title_value] == "宴会場":
-                            print("title matched in manual check: utage list")
-                            savedFolderPaths[6].append(folder_path)
-
-                        else:
-                            print(title_value + " found in manual check, value empty, @venb304 please update manualCheck.json")
+                matchFound = False
+                for genre, song_list in testCategories.items():
+                    if title_value in song_list or folder in song_list:
+                        print(f"matched to maimaiJSON: \t{genre}")
+                        matchFounde = True
+                        match genre:
+                            case "popAndAnime":
+                                savedFolderPaths[0].append(folder_path)
+                            case "niconicoAndVocaloid":
+                                savedFolderPaths[1].append(folder_path)
+                            case "touhouProject":
+                                savedFolderPaths[2].append(folder_path)
+                            case "gameAndVariety":
+                                savedFolderPaths[3].append(folder_path)
+                            case "maimai":
+                                savedFolderPaths[4].append(folder_path)
+                            case "ongekiAndChunithm":
+                                savedFolderPaths[5].append(folder_path)
+                            case _:
+                                continue 
+                        break
                     else:
-                        if title_value:
-                            print(title_value + " not match, Unidentified genre")
-                        else:
-                            print("No title found, Unidentified genre") 
-                        
-                        savedFolderPaths[8].append(folder_path)
-            else:
-                print(f"{folder_path} is empty, moving on")
+                        continue
+
+                if not matchFound:
+                    if title_value in genre_manualCheckJSON:
+                        getGenre = genre_manualCheckJSON[title_value]
+                        match getGenre:
+                            case "POPS＆アニメ":
+                                print(f"matched to manual check: \tpop and anime")
+                                savedFolderPaths[0].append(folder_path)
+                            case "niconico＆ボーカロイド":
+                                print(f"matched to manual check: \tnico and voca")
+                                savedFolderPaths[1].append(folder_path)
+                            case "東方Project":
+                                print(f"matched to manual check: \ttouhou project")
+                                savedFolderPaths[2].append(folder_path)
+                            case "ゲーム＆バラエティ":
+                                print(f"matched to manual check: \tgame and variety")
+                                savedFolderPaths[3].append(folder_path)
+                            case "maimai":
+                                print(f"matched to manual check: \tmaimai")
+                                savedFolderPaths[4].append(folder_path)
+                            case "オンゲキ＆CHUNITHM":
+                                print(f"matched to manual check: \tongeki and chuni")
+                                savedFolderPaths[5].append(folder_path)
+                            case "中国流行乐":
+                                print(f"matched to manual check: \tchinese pop")
+                                savedFolderPaths[7].append(folder_path)
+                            case "宴会場":
+                                print(f"matched to manual check: \t utage")
+                                savedFolderPaths[6].append(folder_path)
+                            case _:
+                                print(f"{title_value} found in manual check, value empty, @venb304 please update manualCheck.json")
+                                savedFolderPaths[8].append(folder_path)
+                else:
+                    print(f"Could not find genre for {title_value}")
+                    savedFolderPaths[8].append(folder_path)
 
     for category in savedFolderPaths:
-        match savedFolderPaths.index(category):
+        categoryIndex = savedFolderPaths.index(category)
+        match categoryIndex:
             case 0:
                 print("\ncurrent category: pop and anime\n")
             case 1:
@@ -695,10 +676,11 @@ def proces_toGenre(root_path, genre_manualCheckJSON, catcode, operation):
                         shutil.copytree(savedPaths, os.path.dirname(root_path) + "/" + os.path.basename(root_path)+ " - Reorganized/" + catcode[savedFolderPaths.index(category)] + "/" + os.path.basename(savedPaths), dirs_exist_ok=True)
                     elif operation == 0:
                         shutil.move(savedPaths, os.path.dirname(root_path) + "/" + os.path.basename(root_path)+ " - Reorganized/" + catcode[savedFolderPaths.index(category)] + "/" + os.path.basename(savedPaths))
+                    print(f"{operationText[operation+2]} to {catcode[savedFolderPaths.index(category)]}: {savedPaths}")
                 except:
                     print(f"Error: {operationText[operation]} failed: {savedPaths}")
                     debugging.write(f"Error: {operationText[operation]} failed: {savedPaths} to Reorganization Output folder\n")
-                print(f"{operationText[operation+2]} to {catcode[savedFolderPaths.index(category)]}: {savedPaths}")
+                
 
     print("\nReorganization to genre grouping complete\n")
     recentReorg = open("logging/recent.txt","w", encoding="utf-8-sig")
@@ -1297,12 +1279,22 @@ debugging = open("logging/debugging.txt","w", encoding="utf-8-sig")
 unidentifiedChartsDebug = open("logging/unidentifiedCharts.txt","w", encoding="utf-8-sig")
 
 operationText = ["move","copy","moved","copied"]
+
 popAndAnime = []
 niconicoAndVocaloid = []
 touhouProject = []
 gameAndVariety = []
 maimai = []
 ongekiAndChunithm = []
+
+testCategories = {
+    "popAndAnime": [],
+    "niconicoAndVocaloid": [],
+    "touhouProject": [],
+    "gameAndVariety": [],
+    "maimai": [],
+    "ongekiAndChunithm": []    
+}
 
 maimai = []
 maimai_PLUS = []
@@ -1504,8 +1496,7 @@ while running:
             generate_manifest(root_path, replace_files, append_guid)
 
             print(f"collection.json files generated in {root_path}/output")
-        
-
+    
         case "7":
             print("Restructuring to pre beta")
             print("The given path should have the following folders:")
