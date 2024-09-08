@@ -81,12 +81,12 @@ def generate_manifest(root_path, replace_files, append_guid):
             dirs.clear()  # prevent descending into subdirectories
     process_directories(root_path, replace_files, append_guid)
 
-def unknownHandler(title_value, folder_path, catcode):
+def genre_unknownHandler(title_value, folder_path, catcode, operation ):
     chosen = False
     print(f"unable to determine genre for {title_value} in {folder_path}")
     while not chosen:
         print("Choices:")
-        print("[1] Copy to unidentified folder")
+        print("[1] Copy/Move to unidentified folder")
         print("[2] Choose Manually")
         print("[3] Log to unidentifiedCharts.txt and Ignore")
 
@@ -94,13 +94,16 @@ def unknownHandler(title_value, folder_path, catcode):
         match choice:
             case "1":
                 chosen = True
-                os.makedirs(root_path + "/levels/Unidentified/" + os.path.basename(folder_path), exist_ok=True)
+                os.makedirs(os.path.dirname(root_path) +"/" + os.path.basename(root_path) +" - Reorganized/" + catcode[8] + "/" + title_value, exist_ok=True)
                 try:
-                    shutil.copytree(folder_path, root_path + "/levels/Unidentified/" + os.path.basename(folder_path), dirs_exist_ok=True)
+                    if operation == 1:
+                        shutil.copytree(folder_path, os.path.dirname(root_path) +"/" + os.path.basename(root_path) +" - Reorganized/" + catcode[8] + "/" + title_value, dirs_exist_ok=True)
+                    elif operation == 0:
+                        shutil.move(folder_path, os.path.dirname(root_path) +"/" + os.path.basename(root_path) +" - Reorganized/" + catcode[8] + "/" + title_value)
                 except:
-                    print(f"Error: Copy failed: {folder_path}")
-                    debugging.write(f"Error: Copy failed: {folder_path} to Output folder\n")
-                print(f"copied to output: {folder_path}")
+                    print(f"Error: {operationText[operation]} failed: {title_value}")
+                    debugging.write(f"Error: {operationText[operation]} failed: {title_value} to Reorganization Output folder\n")
+                print(f"{operationText[operation+2]} to {versionCode[8]}: {title_value}")
                 
             case "2":
                 chosen = True
@@ -118,13 +121,16 @@ def unknownHandler(title_value, folder_path, catcode):
                 while not manualChosen:
                     manualChoice = str(input("Enter the number of your choice: "))
                     if manualChoice in ["1","2","3","4","5","6","7","8","9"]:
-                        os.makedirs(root_path + "/levels/" + catcode[int(manualChoice)-1] + "/" + os.path.basename(folder_path), exist_ok=True)
+                        os.makedirs(os.path.dirname(root_path) +"/" + os.path.basename(root_path) +" - Reorganized/" + catcode[int(manualChoice)-1] + "/" + title_value, exist_ok=True)
                         try:
-                            shutil.copytree(folder_path, root_path + "/levels/" + catcode[int(manualChoice)-1] + "/" + os.path.basename(folder_path), dirs_exist_ok=True)
+                            if operation == 1:
+                                shutil.copytree(folder_path, os.path.dirname(root_path) +"/" + os.path.basename(root_path) +" - Reorganized/" + catcode[int(manualChoice)-1] + "/" + title_value, dirs_exist_ok=True)
+                            elif operation == 0:
+                                shutil.move(folder_path, os.path.dirname(root_path) +"/" + os.path.basename(root_path) +" - Reorganized/" + catcode[int(manualChoice)-1] + "/" + title_value)
                         except:
-                            print(f"Error: Copy failed: {folder_path}")
-                            debugging.write(f"Error: Copy failed: {folder_path} to Output folder\n")
-                        print(f"copied to output: {folder_path}")
+                            print(f"Error: {operationText[operation]} failed: {title_value}")
+                            debugging.write(f"Error: {operationText[operation]} failed: {title_value} to Reorganization Output folder\n")
+                            print(f"{operationText[operation+2]} to {catcode[int(manualChoice)-1]}: {title_value}")
                         manualChosen = True
                     else:
                         print("Invalid choice, please try again")
@@ -132,8 +138,88 @@ def unknownHandler(title_value, folder_path, catcode):
                         continue
             case "3":
                 chosen = True
-                print(f"IGNORED: {title_value} in {folder_path}")
-                unidentifiedChartsDebug.write(f"IGNORED: {title_value} in {folder_path}\n")
+                print(f"GENRE IGNORED: {title_value} in {folder_path}")
+                unidentifiedChartsDebug.write(f"VERSION IGNORED: {title_value} in {folder_path}\n")
+                
+            case "_":
+                print("Invalid choice, please try again")
+                chosen = False
+                continue
+
+def version_unknownHandler(title_value, folder_path, versionCode,operation):
+    chosen = False
+    print(f"unable to determine version for {title_value} in {folder_path}")
+    while not chosen:
+        print("Choices:")
+        print("[1] Copy to unidentified folder")
+        print("[2] Choose Manually")
+        print("[3] Log to unidentifiedCharts.txt and Ignore")
+
+        choice = str(input("Enter the number of your choice: "))
+        match choice:
+            case "1":
+                chosen = True
+                os.makedirs(os.path.dirname(root_path) +"/" + os.path.basename(root_path) +" - Reorganized/" + versionCode[24] + "/" + title_value, exist_ok=True)
+                try:
+                    if operation == 1:
+                        shutil.copytree(folder_path, os.path.dirname(root_path) +"/" + os.path.basename(root_path) +" - Reorganized/" + versionCode[24] + "/" + title_value, dirs_exist_ok=True)
+                    elif operation == 0:
+                        shutil.move(folder_path, os.path.dirname(root_path) +"/" + os.path.basename(root_path) +" - Reorganized/" + versionCode[24] + "/" + title_value)
+                except:
+                    print(f"Error: {operationText[operation]} failed: {title_value}")
+                    debugging.write(f"Error: {operationText[operation]} failed: {title_value} to Reorganization Output folder\n")
+                print(f"{operationText[operation+2]} to {versionCode[int(manualChoice)-1]}: {title_value}")
+                
+            case "2":
+                chosen = True
+                print("Choices:")
+                print(f"[1] {versionCode[0]}")
+                print(f"[2] {versionCode[1]}")
+                print(f"[3] {versionCode[2]}")
+                print(f"[4] {versionCode[3]}")
+                print(f"[5] {versionCode[4]}")
+                print(f"[6] {versionCode[5]}")
+                print(f"[7] {versionCode[6]}")
+                print(f"[8] {versionCode[7]}")
+                print(f"[9] {versionCode[8]}")
+                print(f"[10] {versionCode[9]}")
+                print(f"[11] {versionCode[10]}")
+                print(f"[12] {versionCode[11]}")
+                print(f"[13] {versionCode[12]}")
+                print(f"[14] {versionCode[13]}")
+                print(f"[15] {versionCode[14]}")
+                print(f"[16] {versionCode[15]}")
+                print(f"[17] {versionCode[16]}")
+                print(f"[18] {versionCode[17]}")
+                print(f"[19] {versionCode[18]}")
+                print(f"[20] {versionCode[19]}")
+                print(f"[21] {versionCode[20]}")
+                print(f"[22] {versionCode[21]}")
+                print(f"[23] {versionCode[22]}")
+                print(f"[24] {versionCode[23]}")
+                manualChosen = False
+                while not manualChosen:
+                    manualChoice = input("Enter the number of your choice:")
+                    if int(manualChoice) in [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]:
+                        os.makedirs(os.path.dirname(root_path) +"/" + os.path.basename(root_path) +" - Reorganized/" + versionCode[int(manualChoice)-1] + "/" + title_value, exist_ok=True)
+                        try:
+                            if operation == 1:
+                                shutil.copytree(folder_path, os.path.dirname(root_path) +"/" + os.path.basename(root_path) +" - Reorganized/" + versionCode[int(manualChoice)-1] + "/" + title_value, dirs_exist_ok=True)
+                            elif operation == 0:
+                                shutil.move(folder_path, os.path.dirname(root_path) +"/" + os.path.basename(root_path) +" - Reorganized/" + versionCode[int(manualChoice)-1] + "/" + title_value)
+                        except:
+                            print(f"Error: {operationText[operation]} failed: {title_value}")
+                            debugging.write(f"Error: {operationText[operation]} failed: {title_value} to Reorganization Output folder\n")
+                        print(f"{operationText[operation+2]} to {versionCode[int(manualChoice)-1]}: {title_value}")
+                        manualChosen = True
+                    else:
+                        print("Invalid choice, please try again")
+                        manualChosen = False
+                        continue
+            case "3":
+                chosen = True
+                print(f"VERSION IGNORED: {title_value} in {folder_path}")
+                unidentifiedChartsDebug.write(f"VERSION IGNORED: {title_value} in {folder_path}\n")
                 
             case "_":
                 print("Invalid choice, please try again")
@@ -289,50 +375,73 @@ def parse_JSON_Database():
         for item in zetaraku_maimai_songlist_JSON["songs"]:
             if item.get('version') == 'maimai':
                 maimai.append(item.get('songId'))
+                maimai.append(item.get('title'))
             elif item.get('version') == 'maimai PLUS':
                 maimai_PLUS.append(item.get('songId'))
+                maimai_PLUS.append(item.get('title'))
             elif item.get('version') == 'GreeN':
                 GreeN.append(item.get('songId'))
+                GreeN.append(item.get('title'))
             elif item.get('version') == 'GreeN PLUS':
                 GreeN_PLUS.append(item.get('songId'))
+                GreeN_PLUS.append(item.get('title'))
             elif item.get('version') == 'ORANGE':
                 ORaNGE.append(item.get('songId'))
+                ORaNGE.append(item.get('title'))
             elif item.get('version') == 'ORANGE PLUS':
                 ORaNGE_PLUS.append(item.get('songId'))
+                ORaNGE_PLUS.append(item.get('title'))
             elif item.get('version') == 'PiNK':
                 PiNK.append(item.get('songId'))
+                PiNK.append(item.get('title'))
             elif item.get('version') == 'PiNK PLUS':
                 PiNK_PLUS.append(item.get('songId'))
+                PiNK_PLUS.append(item.get('title'))
             elif item.get('version') == 'MURASAKi':
                 MURASAKi.append(item.get('songId'))
+                MURASAKi.append(item.get('title'))
             elif item.get('version') == 'MURASAKi PLUS':
                 MURASAKi_PLUS.append(item.get('songId'))
+                MURASAKi_PLUS.append(item.get('title'))
             elif item.get('version') == 'MiLK':
                 MiLK.append(item.get('songId'))
+                MiLK.append(item.get('title'))
             elif item.get('version') == 'MiLK PLUS':
                 MiLK_PLUS.append(item.get('songId'))
+                MiLK_PLUS.append(item.get('title'))
             elif item.get('version') == 'FiNALE':
                 FiNALE.append(item.get('songId'))
+                FiNALE.append(item.get('title'))
             elif item.get('version') == 'maimaiでらっくす':
                 Deluxe.append(item.get('songId'))
+                Deluxe.append(item.get('title'))
             elif item.get('version') == 'maimaiでらっくす PLUS':
                 Deluxe_PLUS.append(item.get('songId'))
+                Deluxe_PLUS.append(item.get('title'))
             elif item.get('version') == 'Splash':
                 Splash.append(item.get('songId'))
+                Deluxe.append(item.get('title'))
             elif item.get('version') == 'Splash PLUS':
                 Splash_PLUS.append(item.get('songId'))
+                Splash_PLUS.append(item.get('title'))
             elif item.get('version') == 'UNiVERSE':
                 UNiVERSE.append(item.get('songId'))
+                UNiVERSE.append(item.get('title'))
             elif item.get('version') == 'UNiVERSE PLUS':
                 UNiVERSE_PLUS.append(item.get('songId'))
+                UNiVERSE_PLUS.append(item.get('title'))
             elif item.get('version') == 'FESTiVAL':
                 FESTiVAL.append(item.get('songId'))
+                FESTiVAL.append(item.get('title'))
             elif item.get('version') == 'FESTiVAL PLUS':
                 FESTiVAL_PLUS.append(item.get('songId'))
+                FESTiVAL_PLUS.append(item.get('title'))
             elif item.get('version') == 'BUDDiES':
                 BUDDiES.append(item.get('songId'))
+                BUDDiES.append(item.get('title'))
             elif item.get('version') == 'BUDDiES PLUS':
                 BUDDiES_PLUS.append(item.get('songId'))
+                BUDDiES_PLUS.append(item.get('title'))
             else:
                 if item.get('version') == '':
                     continue
@@ -451,37 +560,37 @@ def check_toGenre(root_path,maimaiSongInfoJSON,genre_manualCheckJSON):
     checkLog.write("Check only Log for genres, the following are the folders that are matched to the genre\n")
     checkLog.write("Pop and Anime:\n")
     for item in checkPop:
-        checkLog.write(f"\t{item}\n")
+        checkLog.write(f'\t"{item}":"",\n')
     checkLog.write("Niconico and Vocaloid:\n")
     for item in checkVocaloid:
-        checkLog.write(f"\t{item}\n")
+        checkLog.write(f'\t"{item}":"",\n')
     checkLog.write("Touhou Project:\n")
     for item in checkTouhou:
-        checkLog.write(f"\t{item}\n")
+        checkLog.write(f'\t"{item}":"",\n')
     checkLog.write("Game and Variety:\n")
     for item in checkGame:
-        checkLog.write(f"\t{item}\n")
+        checkLog.write(f'\t"{item}":"",\n')
     checkLog.write("Maimai:\n")
     for item in checkMaimai:
-        checkLog.write(f"\t{item}\n")
+        checkLog.write(f'\t"{item}":"",\n')
     checkLog.write("Ongeki and Chunithm:\n")
     for item in checkOngeki:
-        checkLog.write(f"\t{item}\n")
+        checkLog.write(f'\t"{item}":"",\n')
     checkLog.write("Utage:\n")
     for item in checkUtage:
-        checkLog.write(f"\t{item}\n")
+        checkLog.write(f'\t"{item}":"",\n')
     checkLog.write("Chinese Pop:\n")
     for item in checkChinese:
-        checkLog.write(f"\t{item}\n")
+        checkLog.write(f'\t"{item}":"",\n')
     checkLog.write("Unidentified:\n")
     for item in checkUnidentifiedGenre:
-        checkLog.write(f"\t{item}\n")
+        checkLog.write(f'\t"{item}":"",\n')
 
     checkLog.write("If no charts falls under unidentified, then the collections are supported and is able to be reorganized properly and automatically.\n")
     checkLog.close()
     print("\nChecking to genre complete, See checkingLog.txt in logging folder for results\n")
 
-def proces_toGenre(root_path, maimaiSongInfoJSON, genre_manualCheckJSON, catcode, operation):
+def proces_toGenre(root_path, genre_manualCheckJSON, catcode, operation):
     savedFolderPaths = [[],[],[],[],[],[],[],[],[]]
 
     for root, dirs, files in os.walk(root_path):
@@ -589,37 +698,326 @@ def proces_toGenre(root_path, maimaiSongInfoJSON, genre_manualCheckJSON, catcode
                 print("\ncurrent category: unidentified\n")
             case _:
                 print("\ncurrent category: how? there should not be another category, how did this return to 8\n")
-        operationText = ["copy","move","copied","moved"]
+        
         for savedPaths in category:
+            print(savedPaths)
             if savedFolderPaths.index(category) == 8:
-                unknownHandler(os.path.basename(savedPaths), savedPaths, catcode)
+                genre_unknownHandler(os.path.basename(savedPaths), savedPaths, catcode, operation)
                 continue
             else:
                 os.makedirs(os.path.dirname(root_path) +"/" + os.path.basename(root_path) +" - Reorganized/" + catcode[savedFolderPaths.index(category)] + "/" + os.path.basename(savedPaths), exist_ok=True)
                 try:
-                    if operation == 0:
+                    if operation == 1:
                         shutil.copytree(savedPaths, os.path.dirname(root_path) + "/" + os.path.basename(root_path)+ " - Reorganized/" + catcode[savedFolderPaths.index(category)] + "/" + os.path.basename(savedPaths), dirs_exist_ok=True)
-                    elif operation == 1:
+                    elif operation == 0:
                         shutil.move(savedPaths, os.path.dirname(root_path) + "/" + os.path.basename(root_path)+ " - Reorganized/" + catcode[savedFolderPaths.index(category)] + "/" + os.path.basename(savedPaths))
                 except:
                     print(f"Error: {operationText[operation]} failed: {savedPaths}")
                     debugging.write(f"Error: {operationText[operation]} failed: {savedPaths} to Reorganization Output folder\n")
                 print(f"{operationText[operation+2]} to {catcode[savedFolderPaths.index(category)]}: {savedPaths}")
 
-                # removed the creation of the levels folder and instead creates the genre folders in the root path
-                # unfortunately, the original charts do still exist as this program just copies them to the genre folders
-                # the original charts are not deleted
-                # implement a way to first have program un-nest the folders first, 
-                #   then create backup collection.json files to be used for reverting changes
-                # either to generate it first using the function generate_manifest 
-                #   or use the data.json from zetaraku's database of maimai songs to organize them as 
-                #   necesseary by version again as a way to revert back after organizing by genre
-
     print("\nReorganization to genre grouping complete\n")
+    recentReorg = open("logging/recent.txt","w", encoding="utf-8-sig")
+    recentReorg.write(root_path)
+    recentReorg.close()
 
-def check_toVersion(root_path, versionCode, zetaraku_maimai_songlist_JSON):
+def check_toVersion(root_path, zetaraku_maimai_songlist_JSON, version_manualCheckJSON):
     print("Checking to Version")
     checkmaimai, checkmaimai_PLUS, checkGreeN, checkGreeN_PLUS, checkORaNGE, checkORaNGE_PLUS, checkPiNK, checkPiNK_PLUS, checkMURASAKi, checkMURASAKi_PLUS, checkMiLK, checkMiLK_PLUS, checkFiNALE, checkDeluxe, checkDeluxe_PLUS, checkSplash, checkSplash_PLUS, checkUNiVERSE, checkUNiVERSE_PLUS, checkFESTiVAL, checkFESTiVAL_PLUS, checkBUDDiES, checkBUDDiES_PLUS, checkUnidentifiedVersion = [],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]
+    for root, dirs, files in os.walk(root_path):
+        for folder in dirs:
+            folder_path = os.path.join(root, folder)
+            maidata_path = os.path.join(folder_path, 'maidata.txt')
+            if os.path.isfile(maidata_path):
+                lv_7_value, title_value = parse_maidata(maidata_path)
+                print(f"&title:\t\t{title_value}")
+                temp_title_value = title_value
+
+                if title_value in version_manualCheckJSON:
+                    if version_manualCheckJSON[title_value] == "maimai":
+                        print(f"matched to in version_manualCheckJSON: maimai")
+                        checkmaimai.append(title_value)
+
+                    elif version_manualCheckJSON[title_value] == "maimai PLUS":
+                        print(f"matched to in version_manualCheckJSON: maimai PLUS")
+                        checkmaimai_PLUS.append(title_value)
+
+                    elif version_manualCheckJSON[title_value] == "GreeN":
+                        print(f"matched to in version_manualCheckJSON: GreeN")
+                        checkGreeN.append(title_value)
+
+                    elif version_manualCheckJSON[title_value] == "GreeN PLUS":
+                        print(f"matched to in version_manualCheckJSON: GreeN PLUS")
+                        checkGreeN_PLUS.append(title_value)
+
+                    elif version_manualCheckJSON[title_value] == "ORANGE":
+                        print(f"matched to in version_manualCheckJSON: ORANGE")
+                        checkORaNGE.append(title_value)
+
+                    elif version_manualCheckJSON[title_value] == "ORANGE PLUS":
+                        print(f"matched to in version_manualCheckJSON: ORANGE PLUS")
+                        checkORaNGE_PLUS.append(title_value)
+
+                    elif version_manualCheckJSON[title_value] == "PiNK":
+                        print(f"matched to in version_manualCheckJSON: PiNK")
+                        checkPiNK.append(title_value)
+
+                    elif version_manualCheckJSON[title_value] == "PiNK PLUS":
+                        print(f"matched to in version_manualCheckJSON: PiNK PLUS")
+                        checkPiNK_PLUS.append(title_value)
+
+                    elif version_manualCheckJSON[title_value] == "MURASAKi":
+                        print(f"matched to in version_manualCheckJSON: MURASAKi")
+                        checkMURASAKi.append(title_value)
+
+                    elif version_manualCheckJSON[title_value] == "MURASAKi PLUS":
+                        print(f"matched to in version_manualCheckJSON: MURASAKi PLUS")
+                        checkMURASAKi_PLUS.append(title_value)
+
+                    elif version_manualCheckJSON[title_value] == "MiLK":
+                        print(f"matched to in version_manualCheckJSON: MiLK")
+                        checkMiLK.append(title_value)
+
+                    elif version_manualCheckJSON[title_value] == "MiLK PLUS":
+                        print(f"matched to in version_manualCheckJSON: MiLK PLUS")
+                        checkMiLK_PLUS.append(title_value)
+
+                    elif version_manualCheckJSON[title_value] == "FiNALE":
+                        print(f"matched to in version_manualCheckJSON: FiNALE")
+                        checkFiNALE.append(title_value)
+
+                    elif version_manualCheckJSON[title_value] == "maimaiでらっくす":
+                        print(f"matched to in version_manualCheckJSON: DX")
+                        checkDeluxe.append(title_value)
+
+                    elif version_manualCheckJSON[title_value] == "maimaiでらっくす PLUS":
+                        print(f"matched to in version_manualCheckJSON: DX PLUS")
+                        checkDeluxe_PLUS.append(title_value)
+
+                    elif version_manualCheckJSON[title_value] == "Splash":
+                        print(f"matched to in version_manualCheckJSON: Splash")
+                        checkSplash.append(title_value)
+
+                    elif version_manualCheckJSON[title_value] == "Splash PLUS":
+                        print(f"matched to in version_manualCheckJSON: Splash PLUS")
+                        checkSplash_PLUS.append(title_value)
+
+                    elif version_manualCheckJSON[title_value] == "UNiVERSE":
+                        print(f"matched to in version_manualCheckJSON: UNiVERSE")
+                        checkUNiVERSE.append(title_value)
+
+                    elif version_manualCheckJSON[title_value] == "UNiVERSE PLUS":
+                        print(f"matched to in version_manualCheckJSON: UNiVERSE PLUS")
+                        checkUNiVERSE_PLUS.append(title_value)
+
+                    elif version_manualCheckJSON[title_value] == "FESTiVAL":
+                        print(f"matched to in version_manualCheckJSON: FESTiVAL")
+                        checkFESTiVAL.append(title_value)
+
+                    elif version_manualCheckJSON[title_value] == "FESTiVAL PLUS":
+                        print(f"matched to in version_manualCheckJSON: FESTiVAL PLUS")
+                        checkFESTiVAL_PLUS.append(title_value)
+
+                    elif version_manualCheckJSON[title_value] == "BUDDiES":
+                        print(f"matched to in version_manualCheckJSON: BUDDiES")
+                        checkBUDDiES.append(title_value)
+
+                    elif version_manualCheckJSON[title_value] == "BUDDiES PLUS":
+                        print(f"matched to in in version_manualCheckJSON: BUDDiES PLUS")
+                        checkBUDDiES_PLUS.append(title_value)
+                    elif version_manualCheckJSON[title_value] == "舞萌中国":
+                        print(f"matched to in version_manualCheckJSON: 舞萌中国")
+                        舞萌中国.append(title_value)
+                    else:
+                        print(f"title found but no value for version: {title_value} in {folder_path}")
+                        checkUnidentifiedVersion.append(title_value)
+                else:
+                    
+                    if title_value.startswith("["):
+                        temp_title_value = title_value.replace("[","(").replace("]",")")
+                        print(f"replaced title value: {temp_title_value}")
+
+                    if temp_title_value in maimai or folder in maimai:
+                        print(f"matched to in zetaraku_maimai_songlist_JSON: maimai")
+                        checkmaimai.append(title_value)
+
+                    elif temp_title_value in maimai_PLUS or folder in maimai_PLUS:
+                        print(f"matched to in zetaraku_maimai_songlist_JSON: maimai PLUS")
+                        checkmaimai_PLUS.append(title_value)
+
+                    elif temp_title_value in GreeN or folder in GreeN:
+                        print(f"matched to in zetaraku_maimai_songlist_JSON: GreeN")
+                        checkGreeN.append(title_value)
+
+                    elif temp_title_value in GreeN_PLUS or folder in GreeN_PLUS:
+                        print(f"matched to in zetaraku_maimai_songlist_JSON: GreeN PLUS")
+                        checkGreeN_PLUS.append(title_value)
+
+                    elif temp_title_value in ORaNGE or folder in ORaNGE:
+                        print(f"matched to in zetaraku_maimai_songlist_JSON: ORANGE")
+                        checkORaNGE.append(title_value)
+
+                    elif temp_title_value in ORaNGE_PLUS or folder in ORaNGE_PLUS:
+                        print(f"matched to in zetaraku_maimai_songlist_JSON: ORANGE PLUS")
+                        checkORaNGE_PLUS.append(title_value)
+
+                    elif temp_title_value in PiNK or folder in PiNK:
+                        print(f"matched to in zetaraku_maimai_songlist_JSON: PiNK")
+                        checkPiNK.append(title_value)
+
+                    elif temp_title_value in PiNK_PLUS or folder in PiNK_PLUS:
+                        print(f"matched to in zetaraku_maimai_songlist_JSON: PiNK PLUS")
+                        checkPiNK_PLUS.append(title_value)
+
+                    elif temp_title_value in MURASAKi or folder in MURASAKi:
+                        print(f"matched to in zetaraku_maimai_songlist_JSON: MURASAKi")
+                        checkMURASAKi.append(title_value)
+
+                    elif temp_title_value in MURASAKi_PLUS or folder in MURASAKi_PLUS:
+                        print(f"matched to in zetaraku_maimai_songlist_JSON: MURASAKi PLUS")
+                        checkMURASAKi_PLUS.append(title_value)
+
+                    elif temp_title_value in MiLK or folder in MiLK:
+                        print(f"matched to in zetaraku_maimai_songlist_JSON: MiLK")
+                        checkMiLK.append(title_value)
+
+                    elif temp_title_value in MiLK_PLUS or folder in MiLK_PLUS:
+                        print(f"matched to in zetaraku_maimai_songlist_JSON: MiLK PLUS")
+                        checkMiLK_PLUS.append(title_value)
+
+                    elif temp_title_value in FiNALE or folder in FiNALE:
+                        print(f"matched to in zetaraku_maimai_songlist_JSON: FiNALE")
+                        checkFiNALE.append(title_value)
+
+                    elif temp_title_value in Deluxe or folder in Deluxe:
+                        print(f"matched to in zetaraku_maimai_songlist_JSON: DX")
+                        checkDeluxe.append(title_value)
+
+                    elif temp_title_value in Deluxe_PLUS or folder in Deluxe_PLUS:
+                        print(f"matched to in zetaraku_maimai_songlist_JSON: DX PLUS")
+                        checkDeluxe_PLUS.append(title_value)
+
+                    elif temp_title_value in Splash or folder in Splash:
+                        print(f"matched to in zetaraku_maimai_songlist_JSON: Splash")
+                        checkSplash.append(title_value)
+
+                    elif temp_title_value in Splash_PLUS or folder in Splash_PLUS:
+                        print(f"matched to in zetaraku_maimai_songlist_JSON: Splash PLUS")
+                        checkSplash_PLUS.append(title_value)
+
+                    elif temp_title_value in UNiVERSE or folder in UNiVERSE:
+                        print(f"matched to in zetaraku_maimai_songlist_JSON: UNiVERSE")
+                        checkUNiVERSE.append(title_value)
+
+                    elif temp_title_value in UNiVERSE_PLUS or folder in UNiVERSE_PLUS:
+                        print(f"matched to in zetaraku_maimai_songlist_JSON: UNiVERSE PLUS")
+                        checkUNiVERSE_PLUS.append(title_value)
+
+                    elif temp_title_value in FESTiVAL or folder in FESTiVAL:
+                        print(f"matched to in zetaraku_maimai_songlist_JSON: FESTiVAL")
+                        checkFESTiVAL.append(title_value)
+
+                    elif temp_title_value in FESTiVAL_PLUS or folder in FESTiVAL_PLUS:
+                        print(f"matched to in zetaraku_maimai_songlist_JSON: FESTiVAL PLUS")
+                        checkFESTiVAL_PLUS.append(title_value)
+
+                    elif temp_title_value in BUDDiES or folder in BUDDiES:
+                        print(f"matched to in zetaraku_maimai_songlist_JSON: BUDDiES")
+                        checkBUDDiES.append(title_value)
+
+                    elif temp_title_value in BUDDiES_PLUS or folder in BUDDiES_PLUS:
+                        print(f"matched to in zetaraku_maimai_songlist_JSON: BUDDiES PLUS")
+                        checkBUDDiES_PLUS.append(title_value)
+                    else:
+                        print(f"\nunable to determine version: {title_value} in {folder_path}")
+                        checkUnidentifiedVersion.append(title_value)
+
+    checkLog = open("logging/checkingLog.txt","w", encoding="utf-8-sig")
+    checkLog.write("Check only Log for version, the following are the folders that are matched to the version\n")
+    checkLog.write("maimai:\n")
+    
+    for item in checkmaimai:
+        checkLog.write(f'\t"{item}":"",\n')
+    checkLog.write("maimai PLUS:\n")
+    for item in checkmaimai_PLUS:
+        checkLog.write(f'\t"{item}":"",\n')
+    checkLog.write("舞萌中国:\n")
+    for item in 舞萌中国:
+        checkLog.write(f'\t"{item}":"",\n') 
+    checkLog.write("GreeN:\n")
+    for item in checkGreeN:
+        checkLog.write(f'\t"{item}":"",\n')
+    checkLog.write("GreeN PLUS:\n")
+    for item in checkGreeN_PLUS:
+        checkLog.write(f'\t"{item}":"",\n')
+    checkLog.write("ORANGE:\n")
+    for item in checkORaNGE:
+        checkLog.write(f'\t"{item}":"",\n')
+    checkLog.write("ORANGE PLUS:\n")
+    for item in checkORaNGE_PLUS:
+        checkLog.write(f'\t"{item}":"",\n')
+    checkLog.write("PiNK:\n")
+    for item in checkPiNK:
+        checkLog.write(f'\t"{item}":"",\n')
+    checkLog.write("PiNK PLUS:\n")
+    for item in checkPiNK_PLUS:
+        checkLog.write(f'\t"{item}":"",\n')
+    checkLog.write("MURASAKi:\n")
+    for item in checkMURASAKi:
+        checkLog.write(f'\t"{item}":"",\n')
+    checkLog.write("MURASAKi PLUS:\n")
+    for item in checkMURASAKi_PLUS:
+        checkLog.write(f'\t"{item}":"",\n')
+    checkLog.write("MiLK:\n")
+    for item in checkMiLK:
+        checkLog.write(f'\t"{item}":"",\n')
+    checkLog.write("MiLK PLUS:\n")
+    for item in checkMiLK_PLUS:
+        checkLog.write(f'\t"{item}":"",\n')
+    checkLog.write("FiNALE:\n")
+    for item in checkFiNALE:
+        checkLog.write(f'\t"{item}":"",\n')
+    checkLog.write("DX:\n")
+    for item in checkDeluxe:
+        checkLog.write(f'\t"{item}":"",\n')
+    checkLog.write("DX PLUS:\n")
+    for item in checkDeluxe_PLUS:
+        checkLog.write(f'\t"{item}":"",\n')
+    checkLog.write("Splash:\n")
+    for item in checkSplash:
+        checkLog.write(f'\t"{item}":"",\n')
+    checkLog.write("Splash PLUS:\n")
+    for item in checkSplash_PLUS:
+        checkLog.write(f'\t"{item}":"",\n')
+    checkLog.write("UNiVERSE:\n")
+    for item in checkUNiVERSE:
+        checkLog.write(f'\t"{item}":"",\n')
+    checkLog.write("UNiVERSE PLUS:\n")
+    for item in checkUNiVERSE_PLUS:
+        checkLog.write(f'\t"{item}":"",\n')
+    checkLog.write("FESTiVAL:\n")
+    for item in checkFESTiVAL:
+        checkLog.write(f'\t"{item}":"",\n')
+    checkLog.write("FESTiVAL PLUS:\n")
+    for item in checkFESTiVAL_PLUS:
+        checkLog.write(f'\t"{item}":"",\n')
+    checkLog.write("BUDDiES:\n")
+    for item in checkBUDDiES:
+        checkLog.write(f'\t"{item}":"",\n')
+    checkLog.write("BUDDiES PLUS:\n")
+    for item in checkBUDDiES_PLUS:
+        checkLog.write(f'\t"{item}":"",\n')
+    checkLog.write("Unidentified:\n")
+    for item in checkUnidentifiedVersion:
+        checkLog.write(f'\t"{item}":"",\n')
+    checkLog.write("If no charts falls under unidentified, then the collections are supported and is able to be reorganized properly and automatically.\n")
+    checkLog.close()
+
+    print("\nChecking to Version complete, See checkingLog.txt in logging folder for results\n")
+                    
+def proces_toVersion(root_path, version_manualCheckJSON, versionCode, operation):
+    print("Processing to Version")
+    savedFolderPaths = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],]
     for root, dirs, files in os.walk(root_path):
         for folder in dirs:
             folder_path = os.path.join(root, folder)
@@ -632,192 +1030,289 @@ def check_toVersion(root_path, versionCode, zetaraku_maimai_songlist_JSON):
                     temp_title_value = title_value.replace("[","(").replace("]",")")
                     print(f"replaced title value: {temp_title_value}")
 
-                if temp_title_value in maimai or folder in maimai:
-                    print(f"matched to in zetaraku_maimai_songlist_JSON: maimai")
-                    checkmaimai.append(title_value)
+                if title_value in version_manualCheckJSON:
+                    if version_manualCheckJSON[title_value] == "maimai":
+                        print(f"matched to in version_manualCheckJSON: maimai")
+                        savedFolderPaths[0].append(folder_path)
 
-                elif temp_title_value in maimai_PLUS or folder in maimai_PLUS:
-                    print(f"matched to in zetaraku_maimai_songlist_JSON: maimai PLUS")
-                    checkmaimai_PLUS.append(title_value)
+                    elif version_manualCheckJSON[title_value] == "maimai PLUS":
+                        print(f"matched to in version_manualCheckJSON: maimai PLUS")
+                        savedFolderPaths[1].append(folder_path)
 
-                elif temp_title_value in GreeN or folder in GreeN:
-                    print(f"matched to in zetaraku_maimai_songlist_JSON: GreeN")
-                    checkGreeN.append(title_value)
+                    elif version_manualCheckJSON[title_value] == "舞萌中国":
+                        print(f"matched to in version_manualCheckJSON: 舞萌中国")
+                        savedFolderPaths[2].append(folder_path)
 
-                elif temp_title_value in GreeN_PLUS or folder in GreeN_PLUS:
-                    print(f"matched to in zetaraku_maimai_songlist_JSON: GreeN PLUS")
-                    checkGreeN_PLUS.append(title_value)
+                    elif version_manualCheckJSON[title_value] == "GreeN":
+                        print(f"matched to in version_manualCheckJSON: GreeN")
+                        savedFolderPaths[3].append(folder_path)
 
-                elif temp_title_value in ORaNGE or folder in ORaNGE:
-                    print(f"matched to in zetaraku_maimai_songlist_JSON: ORANGE")
-                    checkORaNGE.append(title_value)
+                    elif version_manualCheckJSON[title_value] == "GreeN PLUS":
+                        print(f"matched to in version_manualCheckJSON: GreeN PLUS")
+                        savedFolderPaths[4].append(folder_path)
+                        
+                    elif version_manualCheckJSON[title_value] == "ORANGE":
+                        print(f"matched to in version_manualCheckJSON: ORANGE")
+                        savedFolderPaths[5].append(folder_path)
 
-                elif temp_title_value in ORaNGE_PLUS or folder in ORaNGE_PLUS:
-                    print(f"matched to in zetaraku_maimai_songlist_JSON: ORANGE PLUS")
-                    checkORaNGE_PLUS.append(title_value)
+                    elif version_manualCheckJSON[title_value] == "ORANGE PLUS":
+                        print(f"matched to in version_manualCheckJSON: ORANGE PLUS")
+                        savedFolderPaths[6].append(folder_path)
 
-                elif temp_title_value in PiNK or folder in PiNK:
-                    print(f"matched to in zetaraku_maimai_songlist_JSON: PiNK")
-                    checkPiNK.append(title_value)
+                    elif version_manualCheckJSON[title_value] == "PiNK":
+                        print(f"matched to in version_manualCheckJSON: PiNK")
+                        savedFolderPaths[7].append(folder_path)
 
-                elif temp_title_value in PiNK_PLUS or folder in PiNK_PLUS:
-                    print(f"matched to in zetaraku_maimai_songlist_JSON: PiNK PLUS")
-                    checkPiNK_PLUS.append(title_value)
+                    elif version_manualCheckJSON[title_value] == "PiNK PLUS":
+                        print(f"matched to in version_manualCheckJSON: PiNK PLUS")
+                        savedFolderPaths[8].append(folder_path)
 
-                elif temp_title_value in MURASAKi or folder in MURASAKi:
-                    print(f"matched to in zetaraku_maimai_songlist_JSON: MURASAKi")
-                    checkMURASAKi.append(title_value)
+                    elif version_manualCheckJSON[title_value] == "MURASAKi":
+                        print(f"matched to in version_manualCheckJSON: MURASAKi")
+                        savedFolderPaths[9].append(folder_path)
 
-                elif temp_title_value in MURASAKi_PLUS or folder in MURASAKi_PLUS:
-                    print(f"matched to in zetaraku_maimai_songlist_JSON: MURASAKi PLUS")
-                    checkMURASAKi_PLUS.append(title_value)
+                    elif version_manualCheckJSON[title_value] == "MURASAKi PLUS":
+                        print(f"matched to in version_manualCheckJSON: MURASAKi PLUS")
+                        savedFolderPaths[10].append(folder_path)
 
-                elif temp_title_value in MiLK or folder in MiLK:
-                    print(f"matched to in zetaraku_maimai_songlist_JSON: MiLK")
-                    checkMiLK.append(title_value)
+                    elif version_manualCheckJSON[title_value] == "MiLK":
+                        print(f"matched to in version_manualCheckJSON: MiLK")
+                        savedFolderPaths[11].append(folder_path)
 
-                elif temp_title_value in MiLK_PLUS or folder in MiLK_PLUS:
-                    print(f"matched to in zetaraku_maimai_songlist_JSON: MiLK PLUS")
-                    checkMiLK_PLUS.append(title_value)
+                    elif version_manualCheckJSON[title_value] == "MiLK PLUS":
+                        print(f"matched to in version_manualCheckJSON: MiLK PLUS")
+                        savedFolderPaths[12].append(folder_path)
 
-                elif temp_title_value in FiNALE or folder in FiNALE:
-                    print(f"matched to in zetaraku_maimai_songlist_JSON: FiNALE")
-                    checkFiNALE.append(title_value)
+                    elif version_manualCheckJSON[title_value] == "FiNALE":
+                        print(f"matched to in version_manualCheckJSON: FiNALE")
+                        savedFolderPaths[13].append(folder_path)
 
-                elif temp_title_value in Deluxe or folder in Deluxe:
-                    print(f"matched to in zetaraku_maimai_songlist_JSON: DX")
-                    checkDeluxe.append(title_value)
+                    elif version_manualCheckJSON[title_value] == "maimaiでらっくす":
+                        print(f"matched to in version_manualCheckJSON: DX")
+                        savedFolderPaths[14].append(folder_path)
 
-                elif temp_title_value in Deluxe_PLUS or folder in Deluxe_PLUS:
-                    print(f"matched to in zetaraku_maimai_songlist_JSON: DX PLUS")
-                    checkDeluxe_PLUS.append(title_value)
+                    elif version_manualCheckJSON[title_value] == "maimaiでらっくす PLUS":
+                        print(f"matched to in version_manualCheckJSON: DX PLUS")
+                        savedFolderPaths[15].append(folder_path)
 
-                elif temp_title_value in Splash or folder in Splash:
-                    print(f"matched to in zetaraku_maimai_songlist_JSON: Splash")
-                    checkSplash.append(title_value)
+                    elif version_manualCheckJSON[title_value] == "Splash":
+                        print(f"matched to in version_manualCheckJSON: Splash")
+                        savedFolderPaths[16].append(folder_path)
 
-                elif temp_title_value in Splash_PLUS or folder in Splash_PLUS:
-                    print(f"matched to in zetaraku_maimai_songlist_JSON: Splash PLUS")
-                    checkSplash_PLUS.append(title_value)
+                    elif version_manualCheckJSON[title_value] == "Splash PLUS":
+                        print(f"matched to in version_manualCheckJSON: Splash PLUS")
+                        savedFolderPaths[17].append(folder_path)
 
-                elif temp_title_value in UNiVERSE or folder in UNiVERSE:
-                    print(f"matched to in zetaraku_maimai_songlist_JSON: UNiVERSE")
-                    checkUNiVERSE.append(title_value)
+                    elif version_manualCheckJSON[title_value] == "UNiVERSE":
+                        print(f"matched to in version_manualCheckJSON: UNiVERSE")
+                        savedFolderPaths[18].append(folder_path)
 
-                elif temp_title_value in UNiVERSE_PLUS or folder in UNiVERSE_PLUS:
-                    print(f"matched to in zetaraku_maimai_songlist_JSON: UNiVERSE PLUS")
-                    checkUNiVERSE_PLUS.append(title_value)
+                    elif version_manualCheckJSON[title_value] == "UNiVERSE PLUS":
+                        print(f"matched to in version_manualCheckJSON: UNiVERSE PLUS")
+                        savedFolderPaths[19].append(folder_path)
 
-                elif temp_title_value in FESTiVAL or folder in FESTiVAL:
-                    print(f"matched to in zetaraku_maimai_songlist_JSON: FESTiVAL")
-                    checkFESTiVAL.append(title_value)
+                    elif version_manualCheckJSON[title_value] == "FESTiVAL":
+                        print(f"matched to in version_manualCheckJSON: FESTiVAL")
+                        savedFolderPaths[20].append(folder_path)
 
-                elif temp_title_value in FESTiVAL_PLUS or folder in FESTiVAL_PLUS:
-                    print(f"matched to in zetaraku_maimai_songlist_JSON: FESTiVAL PLUS")
-                    checkFESTiVAL_PLUS.append(title_value)
+                    elif version_manualCheckJSON[title_value] == "FESTiVAL PLUS":
+                        print(f"matched to in version_manualCheckJSON: FESTiVAL PLUS")
+                        savedFolderPaths[21].append(folder_path)
 
-                elif temp_title_value in BUDDiES or folder in BUDDiES:
-                    print(f"matched to in zetaraku_maimai_songlist_JSON: BUDDiES")
-                    checkBUDDiES.append(title_value)
+                    elif version_manualCheckJSON[title_value] == "BUDDiES":
+                        print(f"matched to in version_manualCheckJSON: BUDDiES")
+                        savedFolderPaths[22].append(folder_path)
 
-                elif temp_title_value in BUDDiES_PLUS or folder in BUDDiES_PLUS:
-                    print(f"matched to in zetaraku_maimai_songlist_JSON: BUDDiES PLUS")
-                    checkBUDDiES_PLUS.append(title_value)
-
-                else:
-                    print(f"\nunable to determine version for {title_value} in {folder_path}")
-                    checkUnidentifiedVersion.append(title_value)
-
-    checkLog = open("logging/checkingLog.txt","w", encoding="utf-8-sig")
-    checkLog.write("Check only Log for version, the following are the folders that are matched to the version\n")
-    checkLog.write("maimai:\n")
-    
-    for item in checkmaimai:
-        checkLog.write(f"\t{item}\n")
-    checkLog.write("maimai PLUS:\n")
-    for item in checkmaimai_PLUS:
-        checkLog.write(f"\t{item}\n")
-    checkLog.write("GreeN:\n")
-    for item in checkGreeN:
-        checkLog.write(f"\t{item}\n")
-    checkLog.write("GreeN PLUS:\n")
-    for item in checkGreeN_PLUS:
-        checkLog.write(f"\t{item}\n")
-    checkLog.write("ORANGE:\n")
-    for item in checkORaNGE:
-        checkLog.write(f"\t{item}\n")
-    checkLog.write("ORANGE PLUS:\n")
-    for item in checkORaNGE_PLUS:
-        checkLog.write(f"\t{item}\n")
-    checkLog.write("PiNK:\n")
-    for item in checkPiNK:
-        checkLog.write(f"\t{item}\n")
-    checkLog.write("PiNK PLUS:\n")
-    for item in checkPiNK_PLUS:
-        checkLog.write(f"\t{item}\n")
-    checkLog.write("MURASAKi:\n")
-    for item in checkMURASAKi:
-        checkLog.write(f"\t{item}\n")
-    checkLog.write("MURASAKi PLUS:\n")
-    for item in checkMURASAKi_PLUS:
-        checkLog.write(f"\t{item}\n")
-    checkLog.write("MiLK:\n")
-    for item in checkMiLK:
-        checkLog.write(f"\t{item}\n")
-    checkLog.write("MiLK PLUS:\n")
-    for item in checkMiLK_PLUS:
-        checkLog.write(f"\t{item}\n")
-    checkLog.write("FiNALE:\n")
-    for item in checkFiNALE:
-        checkLog.write(f"\t{item}\n")
-    checkLog.write("DX:\n")
-    for item in checkDeluxe:
-        checkLog.write(f"\t{item}\n")
-    checkLog.write("DX PLUS:\n")
-    for item in checkDeluxe_PLUS:
-        checkLog.write(f"\t{item}\n")
-    checkLog.write("Splash:\n")
-    for item in checkSplash:
-        checkLog.write(f"\t{item}\n")
-    checkLog.write("Splash PLUS:\n")
-    for item in checkSplash_PLUS:
-        checkLog.write(f"\t{item}\n")
-    checkLog.write("UNiVERSE:\n")
-    for item in checkUNiVERSE:
-        checkLog.write(f"\t{item}\n")
-    checkLog.write("UNiVERSE PLUS:\n")
-    for item in checkUNiVERSE_PLUS:
-        checkLog.write(f"\t{item}\n")
-    checkLog.write("FESTiVAL:\n")
-    for item in checkFESTiVAL:
-        checkLog.write(f"\t{item}\n")
-    checkLog.write("FESTiVAL PLUS:\n")
-    for item in checkFESTiVAL_PLUS:
-        checkLog.write(f"\t{item}\n")
-    checkLog.write("BUDDiES:\n")
-    for item in checkBUDDiES:
-        checkLog.write(f"\t{item}\n")
-    checkLog.write("BUDDiES PLUS:\n")
-    for item in checkBUDDiES_PLUS:
-        checkLog.write(f"\t{item}\n")
-    checkLog.write("Unidentified:\n")
-    for item in checkUnidentifiedVersion:
-        checkLog.write(f"\t{item}\n")
-    checkLog.write("If no charts falls under unidentified, then the collections are supported and is able to be reorganized properly and automatically.\n")
-    checkLog.close()
-
-    print("\nChecking to Version complete, See checkingLog.txt in logging folder for results\n")
+                    elif version_manualCheckJSON[title_value] == "BUDDiES PLUS":
+                        print(f"matched to in in version_manualCheckJSON: BUDDiES PLUS")
+                        savedFolderPaths[23].append(folder_path)
                     
-def proces_toVersion(root_path, versionCode):
-    print("Processing to Version")
+                    else:
+                        print(f"title found but no value for version: {title_value} in {folder_path}")
+
+                        if temp_title_value in maimai or folder in maimai:
+                            print(f"matched to in zetaraku_maimai_songlist_JSON: maimai")
+                            savedFolderPaths[0].append(folder_path)
+
+                        elif temp_title_value in maimai_PLUS or folder in maimai_PLUS:
+                            print(f"matched to in zetaraku_maimai_songlist_JSON: maimai PLUS")
+                            savedFolderPaths[1].append(folder_path)
+
+                        elif temp_title_value in GreeN or folder in GreeN:
+                            print(f"matched to in zetaraku_maimai_songlist_JSON: GreeN")
+                            savedFolderPaths[3].append(folder_path)
+
+                        elif temp_title_value in GreeN_PLUS or folder in GreeN_PLUS:
+                            print(f"matched to in zetaraku_maimai_songlist_JSON: GreeN PLUS")
+                            savedFolderPaths[4].append(folder_path)
+
+                        elif temp_title_value in ORaNGE or folder in ORaNGE:
+                            print(f"matched to in zetaraku_maimai_songlist_JSON: ORANGE")
+                            savedFolderPaths[5].append(folder_path)
+
+                        elif temp_title_value in ORaNGE_PLUS or folder in ORaNGE_PLUS:
+                            print(f"matched to in zetaraku_maimai_songlist_JSON: ORANGE PLUS")
+                            savedFolderPaths[6].append(folder_path)
+
+                        elif temp_title_value in PiNK or folder in PiNK:
+                            print(f"matched to in zetaraku_maimai_songlist_JSON: PiNK")
+                            savedFolderPaths[7].append(folder_path)
+
+                        elif temp_title_value in PiNK_PLUS or folder in PiNK_PLUS:
+                            print(f"matched to in zetaraku_maimai_songlist_JSON: PiNK PLUS")
+                            savedFolderPaths[8].append(folder_path)
+
+                        elif temp_title_value in MURASAKi or folder in MURASAKi:
+                            print(f"matched to in zetaraku_maimai_songlist_JSON: MURASAKi")
+                            savedFolderPaths[9].append(folder_path)
+
+                        elif temp_title_value in MURASAKi_PLUS or folder in MURASAKi_PLUS:
+                            print(f"matched to in zetaraku_maimai_songlist_JSON: MURASAKi PLUS")
+                            savedFolderPaths[10].append(folder_path)
+
+                        elif temp_title_value in MiLK or folder in MiLK:
+                            print(f"matched to in zetaraku_maimai_songlist_JSON: MiLK")
+                            savedFolderPaths[11].append(folder_path)
+
+                        elif temp_title_value in MiLK_PLUS or folder in MiLK_PLUS:
+                            print(f"matched to in zetaraku_maimai_songlist_JSON: MiLK PLUS")
+                            savedFolderPaths[12].append(folder_path)
+
+                        elif temp_title_value in FiNALE or folder in FiNALE:
+                            print(f"matched to in zetaraku_maimai_songlist_JSON: FiNALE")
+                            savedFolderPaths[13].append(folder_path)
+
+                        elif temp_title_value in Deluxe or folder in Deluxe:
+                            print(f"matched to in zetaraku_maimai_songlist_JSON: DX")
+                            savedFolderPaths[14].append(folder_path)
+
+                        elif temp_title_value in Deluxe_PLUS or folder in Deluxe_PLUS:
+                            print(f"matched to in zetaraku_maimai_songlist_JSON: DX PLUS")
+                            savedFolderPaths[15].append(folder_path)
+
+                        elif temp_title_value in Splash or folder in Splash:
+                            print(f"matched to in zetaraku_maimai_songlist_JSON: Splash")
+                            savedFolderPaths[16].append(folder_path)
+
+                        elif temp_title_value in Splash_PLUS or folder in Splash_PLUS:
+                            print(f"matched to in zetaraku_maimai_songlist_JSON: Splash PLUS")
+                            savedFolderPaths[17].append(folder_path)
+
+                        elif temp_title_value in UNiVERSE or folder in UNiVERSE:
+                            print(f"matched to in zetaraku_maimai_songlist_JSON: UNiVERSE")
+                            savedFolderPaths[18].append(folder_path)
+
+                        elif temp_title_value in UNiVERSE_PLUS or folder in UNiVERSE_PLUS:
+                            print(f"matched to in zetaraku_maimai_songlist_JSON: UNiVERSE PLUS")
+                            savedFolderPaths[19].append(folder_path)
+
+                        elif temp_title_value in FESTiVAL or folder in FESTiVAL:
+                            print(f"matched to in zetaraku_maimai_songlist_JSON: FESTiVAL")
+                            savedFolderPaths[20].append(folder_path)
+
+                        elif temp_title_value in FESTiVAL_PLUS or folder in FESTiVAL_PLUS:
+                            print(f"matched to in zetaraku_maimai_songlist_JSON: FESTiVAL PLUS")
+                            savedFolderPaths[21].append(folder_path)
+
+                        elif temp_title_value in BUDDiES or folder in BUDDiES:
+                            print(f"matched to in zetaraku_maimai_songlist_JSON: BUDDiES")
+                            savedFolderPaths[22].append(folder_path)
+
+                        elif temp_title_value in BUDDiES_PLUS or folder in BUDDiES_PLUS:
+                            print(f"matched to in zetaraku_maimai_songlist_JSON: BUDDiES PLUS")
+                            savedFolderPaths[23].append(folder_path)   
+                        else:
+                            if title_value:
+                                print(title_value + " not match, Unidentified Version")
+                            else:
+                                print("No title found, Unidentified Version")
+                            savedFolderPaths[24].append(title_value)
+            else:
+                print(f"{folder_path} is empty, moving on")
+
+    for version in savedFolderPaths:
+        match savedFolderPaths.index(version):
+            case 0:
+                print("\ncurrent category: maimai\n")
+            case 1:
+                print("\ncurrent category: maimai PLUS\n")
+            case 2:
+                print("\ncurrent category: 舞萌中国\n")
+            case 3:
+                print("\ncurrent category: GreeN\n")
+            case 4:
+                print("\ncurrent category: GreeN PLUS\n")
+            case 5:
+                print("\ncurrent category: ORANGE\n")
+            case 6:
+                print("\ncurrent category: ORANGE PLUS\n")
+            case 7:
+                print("\ncurrent category: PiNK\n")
+            case 8:
+                print("\ncurrent category: PiNK PLUS\n")
+            case 9:
+                print("\ncurrent category: MURASAKi\n")
+            case 10:
+                print("\ncurrent category: MURASAKi PLUS\n")
+            case 11:
+                print("\ncurrent category: MiLK\n")
+            case 12:
+                print("\ncurrent category: MiLK PLUS\n")
+            case 13:
+                print("\ncurrent category: FiNALE\n")
+            case 14:
+                print("\ncurrent category: DX\n")
+            case 15:
+                print("\ncurrent category: DX PLUS\n")
+            case 16:
+                print("\ncurrent category: Splash\n")
+            case 17:
+                print("\ncurrent category: Splash PLUS\n")
+            case 18:
+                print("\ncurrent category: UNiVERSE\n")
+            case 19:
+                print("\ncurrent category: UNiVERSE PLUS\n")
+            case 20:
+                print("\ncurrent category: FESTiVAL\n")
+            case 21:
+                print("\ncurrent category: FESTiVAL PLUS\n")
+            case 22:
+                print("\ncurrent category: BUDDiES\n")
+            case 23:
+                print("\ncurrent category: BUDDiES PLUS\n")
+            case 24:
+                print("\ncurrent category: Unidentified Version\n")
+            case _:
+                print("\nunable to determine category\n")
+        for savedPaths in version:
+            print(savedPaths)
+            if savedFolderPaths.index(version) == 24:
+                version_unknownHandler(os.path.basename(savedPaths), savedPaths, versionCode, operation)
+                continue
+            else:
+                os.makedirs(os.path.dirname(root_path) +"/" + os.path.basename(root_path) +" - Reorganized/" + versionCode[savedFolderPaths.index(version)] + "/" + os.path.basename(savedPaths), exist_ok=True)
+                try:
+                    if operation == 1:
+                        shutil.copytree(savedPaths, os.path.dirname(root_path) + "/" + os.path.basename(root_path)+ " - Reorganized/" + versionCode[savedFolderPaths.index(version)] + "/" + os.path.basename(savedPaths), dirs_exist_ok=True)
+                    elif operation == 0:
+                        shutil.move(savedPaths, os.path.dirname(root_path) + "/" + os.path.basename(root_path)+ " - Reorganized/" + versionCode[savedFolderPaths.index(version)] + "/" + os.path.basename(savedPaths))
+                except:
+                    print(f"Error: {operationText[operation]} failed: {savedPaths}")
+                    debugging.write(f"Error: {operationText[operation]} failed: {savedPaths} to Reorganization Output folder\n")
+                print(f"{operationText[operation+2]} to {versionCode[savedFolderPaths.index(version)]}: {savedPaths}")
 
 
+    print("\nReorganization to version grouping complete\n")
+    recentReorg = open("logging/recent.txt","w", encoding="utf-8-sig")
+    recentReorg.write(root_path)
+    recentReorg.close()
 
 # Start of the program
 os.makedirs("logging", exist_ok=True)
 debugging = open("logging/debugging.txt","w", encoding="utf-8-sig")
 unidentifiedChartsDebug = open("logging/unidentifiedCharts.txt","w", encoding="utf-8-sig")
 
+operationText = ["move","copy","moved","copied"]
 popAndAnime = []
 niconicoAndVocaloid = []
 touhouProject = []
@@ -827,6 +1322,7 @@ ongekiAndChunithm = []
 
 maimai = []
 maimai_PLUS = []
+舞萌中国 = []
 GreeN = []
 GreeN_PLUS = []
 ORaNGE = []
@@ -875,11 +1371,12 @@ while running:
     #Restructure
     print("[3] Restructure into GENRE GROUPING (folder structure is ignored as it moved folders with maidata.txt to genre folders)")
     print("[4] Restructure into VERSION GROUPING (folder structure is ignored as it moved folders with maidata.txt to version folders)")
-    #Compatibility
+    #Game Import
     print("[5] For Beta 2.0: Generate ADX Archives (use option[3] or [4] for this for easy importing to AstroDX)\n\t(Warning: Only use if the charts totals to 2gb or less, bigger sizes is not supported as of Beta 2 Patch 5)")
-    print("[6] For Beta 2.0: With the give path, generates the manifest.json files and levels structure to be used for the newer beta 2.0 of AstroDX\n\t(Note: this is your best option to use for now, without zip64 support for astrodx, this is the only way to reorganize the collection)")
-    print("[7] For Pre Beta: Restructure for pre beta (Note: options [2] and [4] is already structured for pre beta, if current structure is for beta 2.0, use this to revert back to import)")
-    
+    print("[6] Restructure to Beta 2.0 (Note: used after option [3] or [4] to generate collection.json files and unnest the folders, to be copied over to AstroDx files)")
+    print("[7] Restructure to pre beta (Note: options [2] and [4] is already structured for pre beta, if current structure is for beta 2.0(has collection.json and unnested charts), use this to revert back to import)")
+    #Reparse
+    print("[8] Reparse the JSON files from the internet or reload offline JSON files")
     # list of what i wanna do now
     # 1. Perform CHeck: check folders only for genre grouping and displays the genre it belongs to
     # 2. Perform organize into Genre: checks and takes a list matched and unidentified folders, copies the content of matched folders to genre folders, and user can choose what to do with unidentified folders
@@ -895,24 +1392,21 @@ while running:
 
     match choice:
         case "1":
-            print("Sample path: C:/Users/username/Downloads/maisquared/")
+            print("check only for Genre grouping")
             root_path = input("Enter the root directory path: ").strip()
             check_toGenre(root_path,maimaiSongInfoJSON,genre_manualCheckJSON)
         case "2":
             print("check only for Version grouping")
-            print("path should have a the following:")
-            print(" - collection folder: inside that more folder with each has manifest.json, ")
-            print(" - levels folder: should be the charts/levels folders that each contain maidata.txt and the rest")
             root_path = input("Enter path: ")
-            check_toVersion(root_path, versionCode, zetaraku_maimai_songlist_JSON)
+            check_toVersion(root_path, zetaraku_maimai_songlist_JSON, version_manualCheckJSON)
         case "3":
             print("Sample path: C:/Users/username/Downloads/maisquared/")
             root_path = input("Enter the root directory path: ").strip()
             langChosen = False
             while not langChosen:
                 print("\nJapanese or English Collection Name:")
-                print("[0] Japanese Collection Name")
                 print("[1] English Collection Name")
+                print("[0] Japanese Collection Name")   
                 catLang = str(input("Enter choice: ")).strip()
                 if catLang in ["0","1"]:
                     langChosen = True
@@ -922,27 +1416,40 @@ while running:
                     continue
 
             operationChosen = False
+            operation = None
             while not operationChosen:
                 print("\nTo Copy, or to Move(Warning: Moving will move the files instead of keeping a copy)")
-                print("[0] Copy")
-                print("[1] Move")
-                operation = str(input("Enter choice: ")).strip()
-                if operation in ["0","1"]:
-                    operation = int(operation)
+                print("[1] Copy")
+                print("[0] Move")
+                
+                Operation = str(input("Enter choice: ")).strip()
+                if Operation in ["0","1"]:
+                    operation = int(Operation)
                     operationChosen = True
                 else:
                     print("Invalid choice, please try again")
                     operationChosen = False
                     continue
-            proces_toGenre(root_path,maimaiSongInfoJSON,genre_manualCheckJSON,catcode[int(catLang)], operation)
+            proces_toGenre(root_path,genre_manualCheckJSON,catcode[int(catLang)], operation)
         case "4":
             print("Version grouping")
-            print("path should have a the following:")
-            print(" - collection folder: inside that more folder with each has manifest.json, ")
-            print(" - levels folder: should be the charts/levels folders that each contain maidata.txt and the rest")
             root_path = input("Enter path: ")
-            proces_toVersion(root_path, versionCode)
-            # need to implement
+            operationChosen = False
+            operation = None
+            while not operationChosen:
+                print("\nTo Copy, or to Move(Warning: Moving will move the files instead of keeping a copy)")
+                print("[1] Copy")
+                print("[0] Move")   
+                Operation = str(input("Enter choice: ")).strip()
+                if Operation in ["0","1"]:
+                    operation = int(Operation)
+                    operationChosen = True
+                else:
+                    print("Invalid choice, please try again")
+                    operationChosen = False
+                    continue
+            proces_toVersion(root_path, version_manualCheckJSON, versionCode, operation)
+            # need to be implement
         case "5":
             print("Generating ADX Archives")
             print("zip64 to be implemented by fumiko, the dev of astrodx, to astrodx. to which CURRENTLY DOES NOT SUPPORT ADX ARCHIVES BIGGER THAN 2GB")
@@ -970,15 +1477,35 @@ while running:
             zip_folder(root_path, (zip_name + ".adx"))
 
         case "6":
-            print("Generating collection.json files")
-            print("this will generate collection.json files in the levels folder of a path")
-            print("Sample root path: C:/Users/username/Downloads/maisquared/levels")
-            print("inside the levels folder or any folder, there should be genre folders like pop and anime, niconico and vocaloid, etc.")
-            
+            print("this will generate collection.json files and unnest the folders. To be used for newer beta 2.0 of AstroDX")            
             # get a way to save and use the recent genre or version grouping to be used with this function
             root_path = input("Enter the root directory path: ").strip()
-            replace_files = input("Move files in levels folder to output? this will move them instead of copy only(y/n): ").strip()
-            append_guid = input("Append GUID to folder names? (y/n): ").strip()
+            replaceDecision = False
+            while not replaceDecision:
+                replace_files = input("Move files in levels folder to output? this will move them instead of copy only(y/n): ").strip().lower()
+                if replace_files == "y":
+                    replace_files = True
+                    replaceDecision = True
+                elif replace_files == "n":
+                    replace_files = False
+                    replaceDecision = True
+                else:
+                    print("Invalid choice, please try again")
+                    replaceDecision = False
+                    continue
+            appendDecision = False
+            while not appendDecision:
+                append_guid = input("Append GUID to folder names? (y/n): ").strip().lower()
+                if append_guid == "y":
+                    append_guid = True
+                    appendDecision = True
+                elif append_guid == "n":
+                    append_guid = False
+                    appendDecision = True
+                else:
+                    print("Invalid choice, please try again")
+                    appendDecision = False
+                    continue
 
             if replace_files == "y":
                 replace_files = True
@@ -996,8 +1523,17 @@ while running:
         
 
         case "7":
-            print("Restructuring for pre beta")
+            print("Restructuring to pre beta")
+            print("The given path should have the following folders:")
+            print("- C0llection folder / collectionNames / collection.json")
             print("to be implemented")
+            root_path = input("Enter the root directory path: ").strip()
+            # restructure_toPreBeta(root)
+        case "8":
+            print("Reparsing JSON files")
+            print("this will reparse the JSON files from the internet or reload offline JSON files")
+            maimaiSongInfoJSON, zetaraku_maimai_songlist_JSON, genre_manualCheckJSON, version_manualCheckJSON = parse_JSON_Database()
+            print("Reparsing complete")
 
         case "0":
             print("Exiting program")
