@@ -1,6 +1,3 @@
-To do list maybe:
-- update version_manualCheck.json to support the currently 105 charts that did not work
-
 # AstroDX Collection Genre Reorganizer
 
 groups charts under a path into of the following genre categories:
@@ -20,18 +17,24 @@ Groups charts under a path into the following version categories
 
 Status
  - able to categorize charts to genre as of September 5, 2024
- - mostly able to categorize charts to version as of Semptember 8, 2024
-   - could not account for 105, waiting for version_manualCheck.json to be filled up
+ - able to categorize charts to version as of Semptember 8, 2024
 
 ## Description
 
 This project automates the sorting and categorization of maimai song charts into their respective genres based on a JSON mapping file. The script parses folders and files, identifies genre categories from chart data, and organizes them into specific directories. Unidentified charts are either logged or manually categorized by the user.
 
 ## Features
-- Generate Manifest Files
-  - Automatically create manifest.json files for each directory, with optional GUID appending.
-- Customizable Chart Sorting
-  - Organizes song charts into genres based on provided data in a JSON file or manual input.
+- Automatic Grouping check
+  - Checks the folders if there are able to be grouped by GENRE or by VERSION
+- Structure Reorganization and Automatic Grouping
+  - Organizes song charts into genres or version from a given path.
+    - Uses Pre Beta Structure
+- Generate ADX Archives (For Beta 2.0)
+  - Currently has partial support from the game, only able to be used if total size of the archive is less than 2gb
+  - Hoping Fumiko supports zip64 soon
+- Generate Manifest.json files and unnests charts
+  - Automatically creates manifest.json files for each directory, with optional GUID appending, and operation to copy or move.
+  - To be used along side the automatic restructuring or path has pre beta folder structure
 - Unidentified Handler
   - Allows users to decide how to process folders that don’t match known genres by either copying them to an unidentified folder, logging them, or assigning them manually.
 - Support for Manual and Automated Classification
