@@ -44,13 +44,13 @@ more chatgpt bs, raahhhhh
 
 ## Prerequisuites
 
-- install python at maybe atleast 3.x
+- install python maybe atleast 3.10
 
 ## Installation
 
 To install the AstroDX Collection Genre Reorganizer, follow these steps:
 
-1. DOwnload whole project (Code > DOwnload Zip): this will most like be more updated than release executable 
+1. DOwnload whole project (Code > DOwnload Zip)
 
 ## Usage
 
