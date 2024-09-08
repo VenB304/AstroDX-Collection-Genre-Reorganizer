@@ -243,12 +243,12 @@ def parse_JSON_Database():
                 maimaiSongInfoJSON = json.loads(response.read())
                 print("Fallback: online other official maimai song information loaded")
             else:
-                
                 print(f"maimaisongInfoJSON: Failed to fetch data, status code: {response.status}")
                 print("Fallback: loading from local database")
                 fallback = open("AstroDX-Collection-Genre-Reorganizer/data/maimai_songs.json", 'r', encoding='utf-8-sig')
                 maimaiSongInfoJSON = json.load(fallback)
                 print("Fallback: offline official maimai song information loaded")
+                fallback.close()
         maimaisongInfoJSON_hasLoaded = True
     except Exception as e:
         print(f"maimaisongInfoJSON: Error fetching or parsing JSON: {e}")
@@ -258,6 +258,7 @@ def parse_JSON_Database():
             maimaiSongInfoJSON = json.load(fallback)
             print("Fallback offline official maimai song information loaded")
             maimaisongInfoJSON_hasLoaded = True
+            fallback.close()
         except:
             maimaiSongInfoJSON = []
             print("Failed to load maimai song information")
@@ -276,6 +277,7 @@ def parse_JSON_Database():
             zetaraku_maimai_songlist_JSON = json.load(fallback)
             print("Fallback: zetaraku's song information loaded")
             zetaraku_maimai_songlist_JSON_hasLoaded = True
+            fallback.close()
         
     except Exception as e:
         print(f"zetaraku song information JSON: Error fetching or parsing JSON: {e}")
@@ -285,6 +287,7 @@ def parse_JSON_Database():
             zetaraku_maimai_songlist_JSON = json.load(fallback)
             print("Fallback: zetaraku's song information loaded")
             zetaraku_maimai_songlist_JSON_hasLoaded = True
+            fallback.close()
         except:
             zetaraku_maimai_songlist_JSON = []
             print("Failed to load zetaraku's maimai song information")
@@ -301,6 +304,7 @@ def parse_JSON_Database():
             fallback = open("AstroDX-Collection-Genre-Reorganizer/data/genre_manualCheck.json", 'r', encoding='utf-8-sig')
             genre_manualCheckJSON = json.load(fallback)
             print("Fallback: offline manual checking json for genre loaded")
+            fallback.close()
         genre_manualCheckJSON_hasLoaded = True
         
     except Exception as e:
@@ -311,6 +315,7 @@ def parse_JSON_Database():
             genre_manualCheckJSON = json.load(fallback)
             print("Fallback: offline genre to title list loaded")
             genre_manualCheckJSON_hasLoaded = True
+            fallback.close()
         except:
             genre_manualCheckJSON = []
             print("Failed to load genre to title information")
@@ -327,6 +332,7 @@ def parse_JSON_Database():
             fallback = open("AstroDX-Collection-Genre-Reorganizer/data/version_manualCheck.json", 'r', encoding='utf-8-sig')
             version_manualCheckJSON = json.load(fallback)
             print("Fallback: offline manual checking json for version loaded")
+            fallback.close()
         version_manualCheckJSON_hasLoaded = True
         print("manual checking json for version loaded")
     except Exception as e:
@@ -337,6 +343,7 @@ def parse_JSON_Database():
             version_manualCheckJSON = json.load(fallback)
             print("Fallback: offline version to title list loaded")
             version_manualCheckJSON_hasLoaded = True
+            fallback.close()
         except:
             version_manualCheckJSON = []
             print("Failed to load version to title information")
@@ -374,73 +381,50 @@ def parse_JSON_Database():
 
         for item in zetaraku_maimai_songlist_JSON["songs"]:
             if item.get('version') == 'maimai':
-                maimai.append(item.get('songId'))
                 maimai.append(item.get('title'))
             elif item.get('version') == 'maimai PLUS':
-                maimai_PLUS.append(item.get('songId'))
                 maimai_PLUS.append(item.get('title'))
             elif item.get('version') == 'GreeN':
-                GreeN.append(item.get('songId'))
                 GreeN.append(item.get('title'))
             elif item.get('version') == 'GreeN PLUS':
-                GreeN_PLUS.append(item.get('songId'))
                 GreeN_PLUS.append(item.get('title'))
             elif item.get('version') == 'ORANGE':
-                ORaNGE.append(item.get('songId'))
                 ORaNGE.append(item.get('title'))
             elif item.get('version') == 'ORANGE PLUS':
-                ORaNGE_PLUS.append(item.get('songId'))
                 ORaNGE_PLUS.append(item.get('title'))
             elif item.get('version') == 'PiNK':
-                PiNK.append(item.get('songId'))
                 PiNK.append(item.get('title'))
             elif item.get('version') == 'PiNK PLUS':
-                PiNK_PLUS.append(item.get('songId'))
                 PiNK_PLUS.append(item.get('title'))
             elif item.get('version') == 'MURASAKi':
-                MURASAKi.append(item.get('songId'))
                 MURASAKi.append(item.get('title'))
             elif item.get('version') == 'MURASAKi PLUS':
-                MURASAKi_PLUS.append(item.get('songId'))
                 MURASAKi_PLUS.append(item.get('title'))
             elif item.get('version') == 'MiLK':
-                MiLK.append(item.get('songId'))
                 MiLK.append(item.get('title'))
             elif item.get('version') == 'MiLK PLUS':
-                MiLK_PLUS.append(item.get('songId'))
                 MiLK_PLUS.append(item.get('title'))
             elif item.get('version') == 'FiNALE':
-                FiNALE.append(item.get('songId'))
                 FiNALE.append(item.get('title'))
             elif item.get('version') == 'maimaiでらっくす':
-                Deluxe.append(item.get('songId'))
                 Deluxe.append(item.get('title'))
             elif item.get('version') == 'maimaiでらっくす PLUS':
-                Deluxe_PLUS.append(item.get('songId'))
                 Deluxe_PLUS.append(item.get('title'))
             elif item.get('version') == 'Splash':
-                Splash.append(item.get('songId'))
                 Deluxe.append(item.get('title'))
             elif item.get('version') == 'Splash PLUS':
-                Splash_PLUS.append(item.get('songId'))
                 Splash_PLUS.append(item.get('title'))
             elif item.get('version') == 'UNiVERSE':
-                UNiVERSE.append(item.get('songId'))
                 UNiVERSE.append(item.get('title'))
             elif item.get('version') == 'UNiVERSE PLUS':
-                UNiVERSE_PLUS.append(item.get('songId'))
                 UNiVERSE_PLUS.append(item.get('title'))
             elif item.get('version') == 'FESTiVAL':
-                FESTiVAL.append(item.get('songId'))
                 FESTiVAL.append(item.get('title'))
             elif item.get('version') == 'FESTiVAL PLUS':
-                FESTiVAL_PLUS.append(item.get('songId'))
                 FESTiVAL_PLUS.append(item.get('title'))
             elif item.get('version') == 'BUDDiES':
-                BUDDiES.append(item.get('songId'))
                 BUDDiES.append(item.get('title'))
             elif item.get('version') == 'BUDDiES PLUS':
-                BUDDiES_PLUS.append(item.get('songId'))
                 BUDDiES_PLUS.append(item.get('title'))
             else:
                 if item.get('version') == '':
