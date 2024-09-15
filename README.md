@@ -1,6 +1,6 @@
 # AstroDX Collection Genre Reorganizer
 
-groups charts under a path into of the following genre categories:
+groups levels/charts under a path into of the following genre categories:
 
 1. pop and anime
 2. niconico and vocaloid
@@ -12,12 +12,12 @@ groups charts under a path into of the following genre categories:
 8. Chinese pop
 9. Unknown (in cases where it cannot find a genre to where it matches)
 
-Groups charts under a path into the following version categories
+Groups levels/charts under a path into the following version categories
  - up to Buddies plus
 
 Status
  - able to categorize charts to genre as of September 5, 2024
- - able to categorize charts to version as of Semptember 8, 2024
+ - able to categorize charts to version as of Semptember 8, 2024(COULD NOT DIFFERENTIATE OLD AND NEW VERSIONS)
 
 ## Description
 
